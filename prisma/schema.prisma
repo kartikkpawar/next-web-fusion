@@ -16,22 +16,25 @@ datasource db {
 // TOOD: Setup user flow
 model Project {
   id            String @id @default(uuid())
-  name          String    @unique
-  userId        String    @unique
+  name          String     
+  userId        String   
   createdAt     DateTime  @default(now())
   updateAt      DateTime  @default(now())
   description   String?
+  pages         Page[]
   // teams TODO: Add teams later    
 }
 
 model Page {
-   id           String    @id @default(cuid())
-  name          String    @unique
-  userId        String    @unique
-  createdAt     DateTime  @default(now())
-  updateAt      DateTime  @default(now())
+  id            String     @id @default(cuid())
+  name          String     
+  userId        String    
+  createdAt     DateTime   @default(now())
+  updateAt      DateTime   @default(now())
   previewImage  String? 
   slug          String
-  elements      String    @default("[]")
+  elements      String     @default("[]")
   projectId     String
+  project       Project?   @relation( fields: [projectId], references: [id], onDelete: Cascade)
+  
 }

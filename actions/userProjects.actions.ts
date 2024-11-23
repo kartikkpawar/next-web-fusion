@@ -19,6 +19,17 @@ export async function createUserProject(formValues: createProjectSchemaType) {
     throw new Error("Invalid data");
   }
 
+  const projectExists = await prisma.project.findUnique({
+    where: {
+      userId,
+      name: data.name,
+    },
+  });
+
+  if (projectExists) {
+    throw new Error("Project with name already exist");
+  }
+
   const project = await prisma.project.create({
     data: {
       userId,
@@ -31,7 +42,7 @@ export async function createUserProject(formValues: createProjectSchemaType) {
     throw new Error("Unable to create project");
   }
 
-  const page = prisma.page.create({
+  return prisma.page.create({
     data: {
       previewImage: null,
       name: "Home",
@@ -40,8 +51,4 @@ export async function createUserProject(formValues: createProjectSchemaType) {
       projectId: project.id,
     },
   });
-
-  if (!page) {
-    throw new Error("Unable to create page");
-  }
 }
