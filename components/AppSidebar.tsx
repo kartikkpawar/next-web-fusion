@@ -28,7 +28,7 @@ export function AppSidebar() {
                   <Link
                     href={item.href}
                     className={cn(
-                      "text-lg flex items-center gap-2 w-full px-3 p-2 hover:bg-primary/20 hover:text-primary rounded-lg",
+                      "text-base flex items-center gap-2 w-full p-3 hover:bg-primary/20 hover:text-primary rounded-lg",
                       pathname === item.href &&
                         "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
                     )}

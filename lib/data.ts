@@ -8,7 +8,7 @@ import { DashboardSidebarRoutesType } from "./types/globaltypes";
 
 export const dashboardSideBarRoutes: DashboardSidebarRoutesType[] = [
   {
-    href: "/dashboard",
+    href: "/home",
     label: "Home",
     icon: HouseIcon,
   },
