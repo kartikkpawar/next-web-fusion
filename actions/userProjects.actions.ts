@@ -51,4 +51,20 @@ export async function createUserProject(formValues: createProjectSchemaType) {
       projectId: project.id,
     },
   });
+
+  // redirect(`/projects//${result.id}`);
+}
+
+export async function getUserProjects() {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Not Authenticated");
+  }
+
+  return prisma.project.findMany({
+    where: {
+      userId,
+    },
+  });
 }

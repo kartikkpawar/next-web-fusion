@@ -1,4 +1,7 @@
+import { Suspense } from "react";
+import SkeletonLoader from "../../../components/SkeletonLoader";
 import CreateProjectButton from "./_components/CreateProjectButton";
+import UserProjects from "./_components/UserProjects";
 
 export default function DashboardHome() {
   return (
@@ -10,6 +13,9 @@ export default function DashboardHome() {
         </div>
         <CreateProjectButton />
       </div>
+      <Suspense fallback={<SkeletonLoader />}>
+        <UserProjects />
+      </Suspense>
     </div>
   );
 }

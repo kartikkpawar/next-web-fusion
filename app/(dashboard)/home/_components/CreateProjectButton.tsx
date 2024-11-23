@@ -25,7 +25,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-function CreateProjectButton() {
+function CreateProjectButton({ triggeredText }: { triggeredText?: string }) {
   const [open, setOpen] = useState(false);
 
   const mutation = useMutation({
@@ -65,7 +65,8 @@ function CreateProjectButton() {
     >
       <DialogTrigger>
         <Button className="font-semibold">
-          <PlusIcon /> Create Project
+          <PlusIcon />
+          {triggeredText || "Create Project"}
         </Button>
       </DialogTrigger>
       <DialogContent>
