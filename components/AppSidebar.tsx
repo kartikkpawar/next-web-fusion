@@ -15,6 +15,11 @@ import Logo from "./Logo";
 
 export function AppSidebar() {
   const pathname = usePathname();
+  console.log(pathname, "@@pathname");
+
+  const notSidebarRoute = dashboardSideBarRoutes.find(
+    (route) => route.href === pathname
+  );
 
   return (
     <Sidebar className="bg-accent">
@@ -29,7 +34,8 @@ export function AppSidebar() {
                     href={item.href}
                     className={cn(
                       "text-base flex items-center gap-2 w-full p-3 hover:bg-primary/20 hover:text-primary rounded-lg",
-                      pathname === item.href &&
+                      (pathname === item.href ||
+                        (!notSidebarRoute && item.href === "/home")) &&
                         "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
                     )}
                   >
