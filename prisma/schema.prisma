@@ -9,22 +9,13 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 // TOOD: Setup user flow
-model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String    @unique
-  email         String    @unique
-  createdAt     DateTime  @default(now())
-  updateAt      DateTime  @default(now())
-  userId        String    @unique
-}
-
-model Projects {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+model Project {
+  id            String @id @default(uuid())
   name          String    @unique
   userId        String    @unique
   createdAt     DateTime  @default(now())
@@ -34,7 +25,7 @@ model Projects {
 }
 
 model Page {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+   id           String    @id @default(cuid())
   name          String    @unique
   userId        String    @unique
   createdAt     DateTime  @default(now())

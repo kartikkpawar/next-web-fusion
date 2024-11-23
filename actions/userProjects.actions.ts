@@ -19,7 +19,7 @@ export async function createUserProject(formValues: createProjectSchemaType) {
     throw new Error("Invalid data");
   }
 
-  const project = await prisma.projects.create({
+  const project = await prisma.project.create({
     data: {
       userId,
       name: data.name,
