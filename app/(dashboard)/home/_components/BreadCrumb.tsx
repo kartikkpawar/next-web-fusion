@@ -7,6 +7,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { dashboardSideBarRoutes } from "@/lib/data";
+import { capitalizeFirstLetter } from "@/lib/helper";
 import { usePathname } from "next/navigation";
 
 import React, { Fragment, useCallback } from "react";
@@ -18,14 +19,14 @@ function BreadCrumb() {
     const activeRoute = dashboardSideBarRoutes.find(
       (route) => route.href === `/${path}`
     );
-    return activeRoute?.label;
+    return activeRoute?.label || null;
   }, []);
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+          <BreadcrumbLink href="/home">Home</BreadcrumbLink>
         </BreadcrumbItem>
 
         {splitPath.map((path) => {
@@ -34,9 +35,15 @@ function BreadCrumb() {
             <Fragment key={path}>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink href={`/${path}`}>
-                  {routeDetails(path)}
-                </BreadcrumbLink>
+                {routeDetails(path) ? (
+                  <BreadcrumbLink href={`/${path}`}>
+                    {routeDetails(path)}
+                  </BreadcrumbLink>
+                ) : (
+                  <span className="cursor-not-allowed">
+                    {capitalizeFirstLetter(path)}
+                  </span>
+                )}
               </BreadcrumbItem>
             </Fragment>
           );

@@ -6,6 +6,7 @@ import {
 } from "@/lib/types/forms.types";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function createUserSite(formValues: createSiteSchemaType) {
   const { userId } = await auth();
@@ -49,11 +50,11 @@ export async function createUserSite(formValues: createSiteSchemaType) {
     throw new Error("Unable to create Site");
   }
 
-  return prisma.page.create({
+  prisma.page.create({
     data: {
       previewImage: null,
       title: "Home",
-      slug: "/home",
+      slug: "home",
       userId,
       siteId: site.id,
       createdBy: (
@@ -64,7 +65,7 @@ export async function createUserSite(formValues: createSiteSchemaType) {
     },
   });
 
-  // redirect(`/Sites//${result.id}`);
+  redirect(`/site/${site.id}/pages`);
 }
 
 export async function getUserSites() {
@@ -78,6 +79,7 @@ export async function getUserSites() {
     where: {
       userId,
     },
+    include: { pages: true },
   });
 }
 

@@ -12,6 +12,33 @@ import { AlertCircle, InboxIcon } from "lucide-react";
 import Link from "next/link";
 import CreateSiteButton from "./CreateSiteButton";
 import SiteActions from "./SiteActions";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { STATUS } from "@/lib/types/global.types";
+
+function getStatusColor(status: STATUS): string {
+  switch (status) {
+    case "LIVE":
+      return "bg-green-500";
+    case "DRAFT":
+      return "bg-yellow-500";
+    case "DISABLED":
+      return "bg-gray-500";
+    default:
+      return "bg-blue-500";
+  }
+}
+
+function getPagesText(pages: number) {
+  switch (pages) {
+    case 0:
+      return "No Pages";
+    case 1:
+      return "1 Page";
+    default:
+      return `${pages} Pages`;
+  }
+}
 
 async function UserSites() {
   const sites = await getUserSites();
@@ -45,33 +72,41 @@ async function UserSites() {
   return (
     <div className="grid mt-10 grid-cols-3 gap-10">
       {sites.map((site) => (
-        <Card key={site.id} className="flex flex-col rounded-xl">
-          <CardHeader className="flex justify-between flex-row">
-            <CardTitle className="w-full truncate">{site.title}</CardTitle>
+        <Card key={site.id} className="flex flex-col">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-lg">{site.title}</CardTitle>
             <SiteActions
+              siteDescription={site.description}
               siteId={site.id}
               siteTitle={site.title}
-              siteDescription={site.description}
             />
           </CardHeader>
-          {site.description && (
-            <CardContent className="flex-grow">
-              <p className="text-muted-foreground">{site.description}</p>
-            </CardContent>
-          )}
-          <CardFooter className="flex justify-between items-center">
-            <div className="text-sm text-muted-foreground">
-              By <span className="font-semibold">{site.createdBy}</span>
+          <CardContent>
+            <p className="text-xs text-muted-foreground">{site.description}</p>
+            <div className="mt-4 flex items-center justify-between">
+              <Badge
+                className={`${getStatusColor(
+                  site.status as STATUS
+                )} text-white`}
+              >
+                {site.status}
+              </Badge>
+              <span className="text-xs text-muted-foreground">
+                {getPagesText(site.pages.length)}
+              </span>
             </div>
-            <div className="text-sm text-muted-foreground">
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            <div className="text-xs text-muted-foreground">
+              By {site.createdBy}
+            </div>
+            <div className="text-xs text-muted-foreground">
               {formatDistanceToNow(site.createdAt, { addSuffix: true })}
             </div>
           </CardFooter>
           <CardFooter>
-            <Link href={`/home/${site.id}`} className="w-full">
-              <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded">
-                View Pages
-              </button>
+            <Link href={`/site/${site.id}/pages`} className="w-full">
+              <Button className="w-full">View Pages</Button>
             </Link>
           </CardFooter>
         </Card>

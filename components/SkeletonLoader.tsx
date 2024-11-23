@@ -9,12 +9,16 @@ export default function SkeletonLoader({
   length?: number;
   className?: string;
 }) {
-  return Array(length)
-    .fill("")
-    .map((i, index) => (
-      <Skeleton
-        className={cn("w-full h-[300px] rounded-lg", className)}
-        key={index}
-      />
-    ));
+  return (
+    <div className="grid grid-cols-3 gap-5">
+      {Array(length)
+        .fill("")
+        .map((i, index) => (
+          <Skeleton
+            className={cn("w-full h-[300px] rounded-lg", className)}
+            key={index}
+          />
+        ))}
+    </div>
+  );
 }

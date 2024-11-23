@@ -19,7 +19,7 @@ model Site {
   title         String     
   userId        String   
   createdAt     DateTime  @default(now())
-  updateAt      DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
   description   String?
   pages         Page[]
   status        String    @default("DRAFT")
@@ -33,7 +33,7 @@ model Page {
   title         String     
   userId        String    
   createdAt     DateTime   @default(now())
-  updateAt      DateTime   @default(now())
+  updatedAt     DateTime   @default(now())
   previewImage  String? 
   slug          String
   elements      String     @default("[]")
