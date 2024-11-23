@@ -13,11 +13,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-model Post {
+// TOOD: Setup user flow
+model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String    @unique
   email         String    @unique
   createdAt     DateTime  @default(now())
   updateAt      DateTime  @default(now())
+  userId        String    @unique
+}
+
+model Projects {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String    @unique
+  userId        String    @unique
+  createdAt     DateTime  @default(now())
+  updateAt      DateTime  @default(now())
+  description   String?
+  // teams TODO: Add teams later    
+}
+
+model Page {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String    @unique
+  userId        String    @unique
+  createdAt     DateTime  @default(now())
+  updateAt      DateTime  @default(now())
+  previewImage  String? 
+  slug          String
+  elements      String    @default("[]")
+  projectId     String
 }

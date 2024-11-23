@@ -4,7 +4,7 @@ import {
   Settings2Icon,
   Users2Icon,
 } from "lucide-react";
-import { DashboardSidebarRoutesType } from "./types/globaltypes";
+import { DashboardSidebarRoutesType } from "./types/global.types";
 
 export const dashboardSideBarRoutes: DashboardSidebarRoutesType[] = [
   {
