@@ -113,9 +113,7 @@ function CreateSiteButton({ triggeredText }: { triggeredText?: string }) {
                       <Textarea {...field} className="resize-none" />
                     </FormControl>
                     <FormDescription>
-                      Provide a brief description of what your workflow does.
-                      <br /> This is optional but can help you remember the
-                      workflow&apos;s purpose
+                      Provide a brief description for your site.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
