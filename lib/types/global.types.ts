@@ -5,3 +5,9 @@ export type DashboardSidebarRoutesType = {
   label: string;
   icon: LucideIcon;
 };
+
+export enum STATUS {
+  LIVE = "LIVE",
+  DRAFT = "DRAFT",
+  DISABLED = "DISABLED",
+}

@@ -19,10 +19,10 @@ export async function createUserProject(formValues: createProjectSchemaType) {
     throw new Error("Invalid data");
   }
 
-  const projectExists = await prisma.project.findUnique({
+  const projectExists = await prisma.project.findFirst({
     where: {
       userId,
-      name: data.name,
+      name: data.name.trim(),
     },
   });
 
@@ -33,7 +33,7 @@ export async function createUserProject(formValues: createProjectSchemaType) {
   const project = await prisma.project.create({
     data: {
       userId,
-      name: data.name,
+      name: data.name.trim(),
       description: data.description,
     },
   });
