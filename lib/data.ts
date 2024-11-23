@@ -13,17 +13,17 @@ export const dashboardSideBarRoutes: DashboardSidebarRoutesType[] = [
     icon: HouseIcon,
   },
   {
-    href: "/dashboard/teams",
+    href: "/teams",
     label: "Teams",
     icon: Users2Icon,
   },
   {
-    href: "/dashboard/billing",
+    href: "/billing",
     label: "Billing",
     icon: CreditCardIcon,
   },
   {
-    href: "/dashboard/settings",
+    href: "/settings",
     label: "Settings",
     icon: Settings2Icon,
   },
