@@ -1,5 +1,5 @@
 "use client";
-import { createUserProject } from "@/actions/userProjects.actions";
+import { createUserSite } from "@/actions/userSites.actions";
 import CustomDialogHeader from "@/components/CustomDialogHeader";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -15,8 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  createProjectSchema,
-  createProjectSchemaType,
+  createSiteSchema,
+  createSiteSchemaType,
 } from "@/lib/types/forms.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -25,33 +25,31 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-function CreateProjectButton({ triggeredText }: { triggeredText?: string }) {
+function CreateSiteButton({ triggeredText }: { triggeredText?: string }) {
   const [open, setOpen] = useState(false);
 
   const mutation = useMutation({
-    mutationFn: createUserProject,
+    mutationFn: createUserSite,
     onSuccess: () => {
-      toast.success("Project created successfully", { id: "create-project" });
+      toast.success("Site created successfully", { id: "create-site" });
       setOpen(false);
     },
     onError: (error: Error) => {
-      console.log(error.message);
-
       toast.error(error.message || "Something went wrong", {
-        id: "create-project",
+        id: "create-site",
       });
     },
   });
 
-  const form = useForm<createProjectSchemaType>({
-    resolver: zodResolver(createProjectSchema),
+  const form = useForm<createSiteSchemaType>({
+    resolver: zodResolver(createSiteSchema),
     defaultValues: {
       name: "",
       description: "",
     },
   });
 
-  const onSubmit = (values: createProjectSchemaType) => {
+  const onSubmit = (values: createSiteSchemaType) => {
     mutation.mutate(values);
   };
 
@@ -66,13 +64,13 @@ function CreateProjectButton({ triggeredText }: { triggeredText?: string }) {
       <DialogTrigger>
         <Button className="font-semibold">
           <PlusIcon />
-          {triggeredText || "Create Project"}
+          {triggeredText || "Create Site"}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <CustomDialogHeader
           icon={Layers2}
-          title="Create Project"
+          title="Create Site"
           subTitle="Start building your website"
           subtitleClassname="font-normal"
         />
@@ -142,4 +140,4 @@ function CreateProjectButton({ triggeredText }: { triggeredText?: string }) {
   );
 }
 
-export default CreateProjectButton;
+export default CreateSiteButton;
