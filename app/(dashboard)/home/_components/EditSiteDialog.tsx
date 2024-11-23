@@ -1,8 +1,8 @@
 "use client";
-import { createUserSite } from "@/actions/userSites.actions";
+import { editSite } from "@/actions/userSites.actions";
 import CustomDialogHeader from "@/components/CustomDialogHeader";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -20,21 +20,32 @@ import {
 } from "@/lib/types/forms.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { Layers2, Loader2, PlusIcon } from "lucide-react";
-import { useState } from "react";
+import { Layers2, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-function CreateSiteButton({ triggeredText }: { triggeredText?: string }) {
-  const [open, setOpen] = useState(false);
-
+function EditSiteDialog({
+  open,
+  setOpen,
+  siteTitle,
+  siteId,
+  siteDescription,
+}: {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  siteTitle: string;
+  siteId: string;
+  siteDescription: string | null;
+}) {
   const mutation = useMutation({
-    mutationFn: createUserSite,
+    mutationFn: editSite,
     onSuccess: () => {
       toast.success("Site created successfully", { id: "create-site" });
       setOpen(false);
     },
     onError: (error: Error) => {
+      console.log(error);
+
       toast.error(error.message || "Something went wrong", {
         id: "create-site",
       });
@@ -44,13 +55,13 @@ function CreateSiteButton({ triggeredText }: { triggeredText?: string }) {
   const form = useForm<createSiteSchemaType>({
     resolver: zodResolver(createSiteSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      title: siteTitle || "",
+      description: siteDescription || "",
     },
   });
 
   const onSubmit = (values: createSiteSchemaType) => {
-    mutation.mutate(values);
+    mutation.mutate({ id: siteId, formValues: values });
   };
 
   return (
@@ -61,17 +72,11 @@ function CreateSiteButton({ triggeredText }: { triggeredText?: string }) {
         form.reset();
       }}
     >
-      <DialogTrigger>
-        <Button className="font-semibold">
-          <PlusIcon />
-          {triggeredText || "Create Site"}
-        </Button>
-      </DialogTrigger>
       <DialogContent>
         <CustomDialogHeader
           icon={Layers2}
-          title="Create Site"
-          subTitle="Start building your website"
+          title="Edit Site"
+          subTitle="Edit your site"
           subtitleClassname="font-normal"
         />
         <div className="p-6">
@@ -140,4 +145,4 @@ function CreateSiteButton({ triggeredText }: { triggeredText?: string }) {
   );
 }
 
-export default CreateSiteButton;
+export default EditSiteDialog;

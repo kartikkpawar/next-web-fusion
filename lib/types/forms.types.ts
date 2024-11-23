@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const createSiteSchema = z.object({
-  name: z.string().max(50).min(3),
+  title: z.string().max(50).min(3),
   description: z.string().max(80).optional(),
 });
 
