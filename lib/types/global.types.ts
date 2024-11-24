@@ -11,3 +11,16 @@ export enum STATUS {
   DRAFT = "DRAFT",
   DISABLED = "DISABLED",
 }
+
+export type EditorElement = {
+  type: string;
+  title: string;
+  description?: string;
+  category: string;
+};
+
+export type EditorElementsCollection = {
+  [key: string]: {
+    elements: EditorElement[];
+  };
+};

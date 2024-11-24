@@ -116,7 +116,7 @@ async function SitePages({ siteId }: { siteId: string }) {
             </div>
           </CardContent>
           <CardFooter>
-            <Link href={`/pages/${page.slug}`} className="w-full">
+            <Link href={`/editor/${page.siteId}/${page.id}`} className="w-full">
               <Button className="w-full">Page Editor</Button>
             </Link>
           </CardFooter>
