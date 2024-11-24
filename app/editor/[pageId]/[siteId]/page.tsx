@@ -9,6 +9,15 @@ import EditorLayersSidebar from "../../_components/sidebars/EditorLayersSidebar"
 import EditorGithubSidebar from "../../_components/sidebars/EditorGithubSidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import WebViewer from "../../_components/WebViewer";
+import WebComponentEditorSidebar from "../../_components/sidebars/WebComponentEditorSidebar";
+import {
+  DndContext,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import DragOverlayWrapper from "../../_components/DragOverlayWrapper";
 
 export default function EditorPage({}: {
   params: {
@@ -34,19 +43,39 @@ export default function EditorPage({}: {
     }
   }
 
-  return (
-    <div className="flex h-screen">
-      <EditorSidebarSelector />
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      distance: 10,
+    },
+  });
 
-      <div className="flex h-full flex-col w-full">
-        <EditorTopbar />
-        <div className="flex h-full m-2 gap-5">
-          <ScrollArea className="bg-[#181826] w-[280px] p-2 h-full rounded-lg  border box-border">
-            {renderSidebar()}
-          </ScrollArea>
-          <WebViewer />
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 300,
+      tolerance: 5,
+    },
+  });
+
+  const sensors = useSensors(mouseSensor, touchSensor);
+
+  return (
+    <DndContext sensors={sensors}>
+      <div className="flex h-screen">
+        <EditorSidebarSelector />
+        <div className="flex h-full flex-col w-full">
+          <EditorTopbar />
+          <div className="flex h-full m-2 gap-5">
+            <ScrollArea className="bg-[#181826] w-[280px] p-2 h-full rounded-lg  border box-border">
+              {renderSidebar()}
+            </ScrollArea>
+            <WebViewer />
+            <ScrollArea className="bg-[#181826] w-[280px] p-2 h-full rounded-lg  border box-border">
+              <WebComponentEditorSidebar />
+            </ScrollArea>
+          </div>
         </div>
       </div>
-    </div>
+      <DragOverlayWrapper />
+    </DndContext>
   );
 }

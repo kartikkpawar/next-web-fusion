@@ -6,10 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
 import { elements as elementsList } from "@/lib/elements/elements";
 import { EditorElementsCollection } from "@/lib/types/global.types";
-import { cn } from "@/lib/utils";
 import {
   BoldIcon,
   ChevronRight,
@@ -24,6 +22,7 @@ import {
   TypeIcon,
 } from "lucide-react";
 import { useMemo } from "react";
+import DraggableElement from "../DraggableElement";
 
 const getCategoryIcon = (category: string) => {
   switch (category) {
@@ -88,18 +87,10 @@ function EditorElementsSidebar() {
                       hoverText={element.title}
                       side={"right"}
                     >
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className={cn(
-                          "w-full justify-start text-left font-normal"
-                        )}
-                      >
-                        <code className="mr-2 text-xs">
-                          &lt;{element.type}&gt;
-                        </code>
-                        {element.title}
-                      </Button>
+                      <DraggableElement
+                        type={element.type}
+                        title={element.title}
+                      />
                     </TooltipWrapper>
                   ))}
                 </div>
