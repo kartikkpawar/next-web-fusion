@@ -67,7 +67,7 @@ function EditorElementsSidebar() {
   );
 
   return (
-    <div className="overflow-hidden flex flex-col h-full">
+    <div className="flex flex-col h-full">
       <div className="p-4">
         <h2 className="text-lg font-semibold mb-4">HTML Tags</h2>
         <Accordion type="single" className="w-full" collapsible>

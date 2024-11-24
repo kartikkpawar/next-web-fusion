@@ -64,7 +64,7 @@ export default function EditorPage({}: {
         <EditorSidebarSelector />
         <div className="flex h-full flex-col w-full">
           <EditorTopbar />
-          <div className="flex h-full m-2 gap-5">
+          <div className="flex h-full m-2 gap-5 overflow-hidden">
             <ScrollArea className="bg-[#181826] w-[280px] p-2 h-full rounded-lg  border box-border">
               {renderSidebar()}
             </ScrollArea>
