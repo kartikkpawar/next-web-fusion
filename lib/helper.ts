@@ -1,3 +1,6 @@
+import { EditorElement } from "./types/global.types";
+import { nanoid } from "nanoid";
+
 export function waitFor(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -15,4 +18,11 @@ export function isValidSlug(slug: string) {
 export function generateSlug(title: string) {
   const titleSplit = title.toLowerCase().split(" ");
   return titleSplit.join("-");
+}
+
+export function contructElement(type: string): EditorElement {
+  return {
+    id: nanoid(5),
+    tag: type,
+  };
 }

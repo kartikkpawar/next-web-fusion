@@ -7,7 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { elements as elementsList } from "@/lib/elements/elements";
-import { EditorElementsCollection } from "@/lib/types/global.types";
+import { HtmlElementsCollection } from "@/lib/types/global.types";
 import {
   BoldIcon,
   ChevronRight,
@@ -52,9 +52,9 @@ const getCategoryIcon = (category: string) => {
 };
 
 function EditorElementsSidebar() {
-  const groupedElements: EditorElementsCollection = useMemo(
+  const groupedElements: HtmlElementsCollection = useMemo(
     () =>
-      elementsList.reduce<EditorElementsCollection>((acc, element) => {
+      elementsList.reduce<HtmlElementsCollection>((acc, element) => {
         if (!acc[element.category]) {
           acc[element.category] = {
             elements: [],

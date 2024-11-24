@@ -12,15 +12,23 @@ export enum STATUS {
   DISABLED = "DISABLED",
 }
 
-export type EditorElement = {
+export type HtmlElement = {
   type: string;
   title: string;
   description?: string;
   category: string;
 };
 
-export type EditorElementsCollection = {
+export type HtmlElementsCollection = {
   [key: string]: {
-    elements: EditorElement[];
+    elements: HtmlElement[];
   };
+};
+
+export type EditorElement = {
+  id: string;
+  tag: string;
+  className?: string;
+  children?: EditorElement[];
+  data?: string;
 };

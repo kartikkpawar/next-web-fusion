@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-interface ModalProviderProps {
+interface EditorToolbarsProviderProps {
   children: React.ReactNode;
 }
 
@@ -21,7 +21,9 @@ export const EditorToolbarsContext = createContext<EditorToolbarsDataType>({
   setSelectedSidebar: () => {},
 });
 
-const EditorToolbarsProvider: React.FC<ModalProviderProps> = ({ children }) => {
+const EditorToolbarsProvider: React.FC<EditorToolbarsProviderProps> = ({
+  children,
+}) => {
   const [isMounted, setIsMounted] = useState(false);
   const [topbarDevice, setTopbarDevice] = useState("desktop");
   const [selectedSidebar, setSelectedSidebar] = useState("elements");

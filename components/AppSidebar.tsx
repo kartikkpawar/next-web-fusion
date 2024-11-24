@@ -15,7 +15,6 @@ import Logo from "./Logo";
 
 export function AppSidebar() {
   const pathname = usePathname();
-  console.log(pathname, "@@pathname");
 
   const notSidebarRoute = dashboardSideBarRoutes.find(
     (route) => route.href === pathname

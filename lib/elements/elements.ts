@@ -1,6 +1,6 @@
-import { EditorElement } from "../types/global.types";
+import { HtmlElement } from "../types/global.types";
 
-export const elements: EditorElement[] = [
+export const elements: HtmlElement[] = [
   { title: "Heading 1", type: "h1", category: "Text" },
   { title: "Heading 2", type: "h2", category: "Text" },
   { title: "Heading 3", type: "h3", category: "Text" },

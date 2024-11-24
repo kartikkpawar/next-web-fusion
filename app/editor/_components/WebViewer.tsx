@@ -1,6 +1,7 @@
 "use client";
+import { useElements } from "@/components/providers/ElementsProvider";
 import { cn } from "@/lib/utils";
-import { useDroppable } from "@dnd-kit/core";
+import { DragEndEvent, useDndMonitor, useDroppable } from "@dnd-kit/core";
 import React from "react";
 
 function WebViewer() {
@@ -11,7 +12,19 @@ function WebViewer() {
     },
   });
 
-  console.log("droppable", droppable);
+  const { addElement } = useElements();
+
+  useDndMonitor({
+    onDragEnd: (event: DragEndEvent) => {
+      const { active, over } = event;
+      if (!active || !over) return;
+
+      const isOverdroppingArea = over?.data?.current?.isDropArea;
+      if (isOverdroppingArea) {
+        addElement(active.data.current?.type);
+      }
+    },
+  });
   return (
     <div
       className={cn(
