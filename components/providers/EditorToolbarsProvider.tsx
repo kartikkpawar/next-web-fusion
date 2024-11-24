@@ -24,7 +24,7 @@ export const EditorToolbarsContext = createContext<EditorToolbarsDataType>({
 const EditorToolbarsProvider: React.FC<ModalProviderProps> = ({ children }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [topbarDevice, setTopbarDevice] = useState("desktop");
-  const [selectedSidebar, setSelectedSidebar] = useState("structures");
+  const [selectedSidebar, setSelectedSidebar] = useState("elements");
 
   useEffect(() => {
     setIsMounted(true);

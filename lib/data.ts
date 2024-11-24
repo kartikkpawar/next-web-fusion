@@ -63,7 +63,7 @@ export const devices = [
 export const sidebarSelectorMenu = [
   {
     icon: CirclePlusIcon,
-    key: "structures",
+    key: "elements",
     tooltip: "Add Element",
   },
   {

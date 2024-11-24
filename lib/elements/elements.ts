@@ -1,4 +1,4 @@
-import { EditorElement, EditorElementsCollection } from "../types/global.types";
+import { EditorElement } from "../types/global.types";
 
 export const elements: EditorElement[] = [
   { title: "Heading 1", type: "h1", category: "Text" },
@@ -82,14 +82,3 @@ export const elements: EditorElement[] = [
   { title: "Polygon", type: "polygon", category: "Graphics" },
   { title: "Group", type: "g", category: "Graphics" },
 ];
-
-export const groupedElements: EditorElementsCollection =
-  elements.reduce<EditorElementsCollection>((acc, element) => {
-    if (!acc[element.category]) {
-      acc[element.category] = {
-        elements: [],
-      };
-    }
-    acc[element.category].elements.push(element);
-    return acc;
-  }, {});

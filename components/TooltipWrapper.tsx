@@ -27,10 +27,7 @@ export default function TooltipWrapper({
           {children}
         </TooltipTrigger>
         <TooltipContent side={side}>
-          <p className={cn("", textClassName)}>
-            {hoverText}
-            {side}
-          </p>
+          <p className={cn("", textClassName)}>{hoverText}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

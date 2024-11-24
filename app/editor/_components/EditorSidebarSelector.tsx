@@ -7,10 +7,10 @@ import { cn } from "@/lib/utils";
 function EditorSidebarSelector() {
   const { selectedSidebar, setSelectedSidebar } = useEditorToolbars();
   return (
-    <div className="flex flex-col px-2 space-y-5 bg-[#242431] pt-2">
+    <div className="flex flex-col px-2 space-y-5 bg-[#242431] pt-2 h-full">
       <Logo iconOnly className="p-1" />
       {sidebarSelectorMenu.map((item) => (
-        <TooltipWrapper hoverText={item.tooltip} key={item.key}>
+        <TooltipWrapper hoverText={item.tooltip} key={item.key} side="right">
           <div
             className={cn(
               "p-2 rounded-lg text-white cursor-pointer",
