@@ -50,7 +50,7 @@ export async function createUserSite(formValues: createSiteSchemaType) {
     throw new Error("Unable to create Site");
   }
 
-  prisma.page.create({
+  await prisma.page.create({
     data: {
       previewImage: null,
       title: "Home",
