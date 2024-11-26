@@ -1,5 +1,6 @@
 "use client";
 import { useElements } from "@/components/providers/ElementsProvider";
+import RenderElement from "@/lib/elements/RenderElement";
 import { cn } from "@/lib/utils";
 import { DragEndEvent, useDndMonitor, useDroppable } from "@dnd-kit/core";
 import React from "react";
@@ -12,7 +13,7 @@ function WebViewer() {
     },
   });
 
-  const { addElement } = useElements();
+  const { addElement, elements } = useElements();
 
   useDndMonitor({
     onDragEnd: (event: DragEndEvent) => {
@@ -28,12 +29,14 @@ function WebViewer() {
   return (
     <div
       className={cn(
-        "flex-1 h-full border-2 rounded-lg",
+        "flex-1 h-full border-2 border-transparent rounded-lg",
         droppable.isOver && "border-white"
       )}
       ref={droppable.setNodeRef}
     >
-      WebViewer
+      {elements.map((element) => (
+        <RenderElement key={element.id} element={element} />
+      ))}
     </div>
   );
 }

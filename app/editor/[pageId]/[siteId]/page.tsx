@@ -33,9 +33,9 @@ export default function EditorPage({}: {
       case "elements":
         return <EditorElementsSidebar />;
       case "layers":
-        return <EditorComponentsSidebar />;
-      case "components":
         return <EditorLayersSidebar />;
+      case "components":
+        return <EditorComponentsSidebar />;
       case "git":
         return <EditorGithubSidebar />;
 
