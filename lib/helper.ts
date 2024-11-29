@@ -20,9 +20,19 @@ export function generateSlug(title: string) {
   return titleSplit.join("-");
 }
 
-export function contructElement(type: string): EditorElement {
+export function contructElement({
+  elementType,
+  elementCategory,
+  elementSubCategory,
+}: {
+  elementType: string;
+  elementCategory: string;
+  elementSubCategory: string;
+}): EditorElement {
   return {
     id: nanoid(5),
-    tag: type,
+    tag: elementType,
+    category: elementCategory,
+    subCategory: elementSubCategory,
   };
 }

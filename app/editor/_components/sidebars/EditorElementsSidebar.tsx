@@ -90,6 +90,8 @@ function EditorElementsSidebar() {
                       <DraggableElement
                         type={element.type}
                         title={element.title}
+                        category={category}
+                        subCategory={element.subCategory}
                       />
                     </TooltipWrapper>
                   ))}

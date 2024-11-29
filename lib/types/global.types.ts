@@ -17,6 +17,7 @@ export type HtmlElement = {
   title: string;
   description?: string;
   category: string;
+  subCategory: string;
 };
 
 export type HtmlElementsCollection = {
@@ -31,4 +32,6 @@ export type EditorElement = {
   className?: string;
   children?: EditorElement[];
   data?: string;
+  subCategory: string;
+  category: string;
 };

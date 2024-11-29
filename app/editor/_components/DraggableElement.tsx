@@ -4,13 +4,25 @@ import { cn } from "@/lib/utils";
 import { useDraggable } from "@dnd-kit/core";
 import React from "react";
 
-function DraggableElement({ title, type }: { title: string; type: string }) {
+function DraggableElement({
+  title,
+  type,
+  category,
+  subCategory,
+}: {
+  title: string;
+  type: string;
+  category: string;
+  subCategory: string;
+}) {
   const draggable = useDraggable({
     id: `element-${type}`,
     data: {
       title,
       type,
       isSidebarElement: true,
+      category,
+      subCategory,
     },
   });
   return (

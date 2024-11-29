@@ -22,7 +22,11 @@ function WebViewer() {
 
       const isOverdroppingArea = over?.data?.current?.isDropArea;
       if (isOverdroppingArea) {
-        addElement(active.data.current?.type);
+        addElement({
+          elementType: active.data.current?.type,
+          elementCategory: active.data.current?.category,
+          elementSubCategory: active.data.current?.category,
+        });
       }
     },
   });

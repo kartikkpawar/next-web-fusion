@@ -8,12 +8,20 @@ interface ElementProviderProps {
 }
 
 type ElementProviderDataType = {
-  addElement: (elementType: string) => void;
-  saveElements: () => void;
+  addElement: ({
+    elementType,
+    elementCategory,
+    elementSubCategory,
+  }: {
+    elementType: string;
+    elementCategory: string;
+    elementSubCategory: string;
+  }) => void;
+  saveElements: (newElements: EditorElement[]) => void;
   updateElement: (elementId: string, data: Partial<EditorElement>) => void;
   setCurrentActiveElement: (element: EditorElement) => void;
   elements: EditorElement[];
-  currentActiveElement: string;
+  currentActiveElement: EditorElement | null;
 };
 
 export const EditorContext = createContext<ElementProviderDataType>({
@@ -21,19 +29,20 @@ export const EditorContext = createContext<ElementProviderDataType>({
   saveElements: () => {},
   updateElement: () => {},
   setCurrentActiveElement: () => {},
-  currentActiveElement: "",
+  currentActiveElement: null,
   elements: [],
 });
 
 const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [elements, setElements] = useState<EditorElement[]>([]);
-  const [currentActiveElement, setCurrentActiveElement] = useState();
+  const [currentActiveElement, setCurrentActiveElement] =
+    useState<EditorElement | null>(null);
 
   useEffect(() => {
-    let localElements: unknown = localStorage.getItem("elements-wdf");
-    localElements = JSON.parse(localElements!) || [];
-    setElements(localElements as EditorElement[]);
+    const localElements = localStorage.getItem("elements-wdf");
+    const parsedElements = localElements ? JSON.parse(localElements) : [];
+    setElements(parsedElements as EditorElement[]);
   }, []);
 
   useEffect(() => {
@@ -42,8 +51,20 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
 
   if (!isMounted) return null;
 
-  const addElement = (elementType: string) => {
-    const element = contructElement(elementType);
+  const addElement = ({
+    elementType,
+    elementCategory,
+    elementSubCategory,
+  }: {
+    elementType: string;
+    elementCategory: string;
+    elementSubCategory: string;
+  }) => {
+    const element = contructElement({
+      elementType,
+      elementCategory,
+      elementSubCategory,
+    });
     setElements((prev) => [...prev, element]);
   };
 
@@ -52,8 +73,6 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
       console.error("No elements to save. Skipping save operation.");
       return;
     }
-
-    console.log("Saving new elements:", newElements);
     localStorage.setItem("elements-wdf", JSON.stringify(newElements));
   };
 
@@ -62,12 +81,13 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
       const updatedElements = prevElements.map((element) =>
         element.id === elementId ? { ...element, ...data } : element
       );
-      console.log("Updated elements:", updatedElements);
-      saveElements(updatedElements);
+      saveElements(updatedElements); // Save updated elements to localStorage
       return updatedElements;
     });
 
-    saveElements(elements); // Ensure saveElements is a pure function
+    if (elementId === currentActiveElement?.id) {
+      setCurrentActiveElement({ ...currentActiveElement, ...data });
+    }
   };
 
   return (

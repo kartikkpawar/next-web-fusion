@@ -1,10 +1,11 @@
 import React, { useCallback, useMemo, useRef } from "react";
 import { EditorElement } from "../types/global.types";
 import { useElements } from "@/components/providers/ElementsProvider";
+import { cn } from "../utils";
 
 function RenderElement({ element }: { element: EditorElement }) {
   const customElementRef = useRef<HTMLElement>();
-  const { updateElement } = useElements();
+  const { updateElement, currentActiveElement } = useElements();
 
   const onDoubleClick = () => {
     if (!customElementRef.current) return;
@@ -34,7 +35,11 @@ function RenderElement({ element }: { element: EditorElement }) {
       element.tag,
       {
         id: element.id,
-        className: element.className,
+        className: cn(
+          element.className,
+          currentActiveElement?.id === element.id &&
+            "border border-primary box-border"
+        ),
         ref: customElementRef,
         onDoubleClick,
         onKeyDown,
@@ -43,7 +48,14 @@ function RenderElement({ element }: { element: EditorElement }) {
       },
       element.data || ""
     );
-  }, [element.tag, element.id, element.className, element.data, onBlur]);
+  }, [
+    element.tag,
+    element.id,
+    element.className,
+    element.data,
+    onBlur,
+    currentActiveElement,
+  ]);
 
   return CustomReactComponent;
 }
