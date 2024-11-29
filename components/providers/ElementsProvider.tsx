@@ -19,6 +19,7 @@ type ElementProviderDataType = {
   }) => void;
   saveElements: (newElements: EditorElement[]) => void;
   updateElement: (elementId: string, data: Partial<EditorElement>) => void;
+  deleteElement: (elementId: string) => void;
   setCurrentActiveElement: (element: EditorElement) => void;
   elements: EditorElement[];
   currentActiveElement: EditorElement | null;
@@ -28,6 +29,7 @@ export const EditorContext = createContext<ElementProviderDataType>({
   addElement: () => {},
   saveElements: () => {},
   updateElement: () => {},
+  deleteElement: () => {},
   setCurrentActiveElement: () => {},
   currentActiveElement: null,
   elements: [],
@@ -90,6 +92,16 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     }
   };
 
+  const deleteElement = (elementId: string) => {
+    const eleIndex = elements.findIndex((element) => element.id === elementId);
+
+    setElements((prevElements) => {
+      const updatedElements = prevElements.toSpliced(eleIndex, 1);
+      saveElements(updatedElements);
+      return updatedElements;
+    });
+  };
+
   return (
     <EditorContext.Provider
       value={{
@@ -99,6 +111,7 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
         updateElement,
         setCurrentActiveElement,
         currentActiveElement,
+        deleteElement,
       }}
     >
       {children}
