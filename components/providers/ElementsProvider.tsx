@@ -67,7 +67,11 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
       elementCategory,
       elementSubCategory,
     });
-    setElements((prev) => [...prev, element]);
+    setElements((prev) => {
+      const updatedElements = [...prev, element];
+      saveElements(updatedElements);
+      return updatedElements;
+    });
   };
 
   const saveElements = (newElements: EditorElement[]) => {
@@ -86,7 +90,6 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
       saveElements(updatedElements); // Save updated elements to localStorage
       return updatedElements;
     });
-
     if (elementId === currentActiveElement?.id) {
       setCurrentActiveElement({ ...currentActiveElement, ...data });
     }
@@ -94,7 +97,9 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
 
   const deleteElement = (elementId: string) => {
     const eleIndex = elements.findIndex((element) => element.id === elementId);
-
+    if (currentActiveElement?.id === elementId) {
+      setCurrentActiveElement(null);
+    }
     setElements((prevElements) => {
       const updatedElements = prevElements.toSpliced(eleIndex, 1);
       saveElements(updatedElements);

@@ -29,7 +29,7 @@ export type HtmlElementsCollection = {
 export type EditorElement = {
   id: string;
   tag: string;
-  className?: string;
+  className?: string[];
   children?: EditorElement[];
   data?: string;
   subCategory: string;
