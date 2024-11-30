@@ -17,6 +17,7 @@ function WebComponentEditorSidebar() {
     const eleClasses = currentActiveElement?.className
       ? [...currentActiveElement?.className, value]
       : [value];
+
     updateElement(currentActiveElement?.id, {
       className: eleClasses,
     });

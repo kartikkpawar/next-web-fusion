@@ -9,12 +9,6 @@ import {
 import { tailwindClasses } from "@/lib/editorTailwind/tailwindClasses";
 import { useCallback, useState } from "react";
 
-type TailwindSuggestion = {
-  class: string;
-  category: string;
-  description: string;
-};
-
 function TailwindClassSearch({
   onValueChange,
   classes,
@@ -26,28 +20,27 @@ function TailwindClassSearch({
   const [selectedClass, setSelectedClass] = useState("");
 
   const handleSearch = useCallback(() => {
-    const suggestedClasses: TailwindSuggestion[] = [];
+    const suggestedClasses: string[] = [];
     const searchQuery = classSearchString.toLowerCase();
-    Object.entries(tailwindClasses).forEach(([category, classes]) => {
-      classes.forEach(({ class: className, description }) => {
-        if (
-          className.toLowerCase().includes(searchQuery) ||
-          description.toLowerCase().includes(searchQuery)
-        ) {
-          suggestedClasses.push({
-            class: className,
-            category,
-            description,
-          });
-        }
-      });
+
+    tailwindClasses.forEach((className) => {
+      if (className.includes(searchQuery)) {
+        suggestedClasses.push(className);
+      }
     });
+
     return suggestedClasses;
   }, [classSearchString]);
 
   const addClass = (event: React.KeyboardEvent<HTMLElement>) => {
     if (event.key === "Enter") {
+      if (!selectedClass) {
+        onValueChange(classSearchString);
+        setClassSearchString("");
+        return;
+      }
       onValueChange(selectedClass);
+      setClassSearchString("");
     }
     if (event.key === "Escape") {
       setClassSearchString("");
@@ -70,14 +63,24 @@ function TailwindClassSearch({
           onValueChange={(value) => setClassSearchString(value)}
         />
         <CommandList>
-          {classSearchString && <CommandEmpty>No results found.</CommandEmpty>}
+          {classSearchString && (
+            <CommandEmpty>Press enter to add the cutom class</CommandEmpty>
+          )}
           {classSearchString &&
             handleSearch().map((classname) => (
               <CommandItem
-                key={classname.class}
-                disabled={classes.includes(classname.class)}
+                disabled={classes.includes(classname)}
+                key={classname}
               >
-                {classname.class}
+                <div
+                  onClick={() => {
+                    setClassSearchString("");
+                    onValueChange(classname);
+                  }}
+                  className="w-full"
+                >
+                  {classname}
+                </div>
               </CommandItem>
             ))}
         </CommandList>
