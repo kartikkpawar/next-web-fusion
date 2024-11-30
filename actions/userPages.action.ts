@@ -5,6 +5,7 @@ import {
   createPageSchema,
   createPageSchemaType,
 } from "@/lib/types/forms.types";
+import { EditorElement } from "@/lib/types/global.types";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
@@ -124,4 +125,49 @@ export async function editPage({
     },
   });
   revalidatePath(`/site/${siteId}/pages`);
+}
+
+export async function updatePageData({
+  elements,
+  pageId,
+  siteId,
+}: {
+  elements: EditorElement[];
+  pageId: string;
+  siteId: string;
+}) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Not Authenticated");
+  }
+
+  const pagePresent = await prisma.page.findUnique({
+    where: {
+      id: pageId,
+      siteId,
+      userId,
+    },
+  });
+  console.log({
+    id: pageId,
+    siteId,
+    userId,
+  });
+
+  if (!pagePresent) {
+    throw new Error("Page not found, Try again after sometime");
+  }
+
+  await prisma.page.update({
+    where: {
+      id: pageId,
+      siteId,
+      userId,
+    },
+    data: {
+      elements: JSON.stringify(elements),
+    },
+  });
+  revalidatePath(`/editor/${siteId}/${pageId}`);
 }

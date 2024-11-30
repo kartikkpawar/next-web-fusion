@@ -1,15 +1,7 @@
 "use client";
-import React from "react";
-import EditorTopbar from "../../_components/EditorTopbar";
-import EditorSidebarSelector from "../../_components/EditorSidebarSelector";
 import { useEditorToolbars } from "@/components/providers/EditorToolbarsProvider";
-import EditorElementsSidebar from "../../_components/sidebars/EditorElementsSidebar";
-import EditorComponentsSidebar from "../../_components/sidebars/EditorComponentsSidebar";
-import EditorLayersSidebar from "../../_components/sidebars/EditorLayersSidebar";
-import EditorGithubSidebar from "../../_components/sidebars/EditorGithubSidebar";
+import ElementsProvider from "@/components/providers/ElementsProvider";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import WebViewer from "../../_components/WebViewer";
-import WebComponentEditorSidebar from "../../_components/sidebars/WebComponentEditorSidebar";
 import {
   DndContext,
   MouseSensor,
@@ -18,9 +10,18 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import DragOverlayWrapper from "../../_components/DragOverlayWrapper";
-import ElementsProvider from "@/components/providers/ElementsProvider";
+import EditorSidebarSelector from "../../_components/EditorSidebarSelector";
+import EditorTopbar from "../../_components/EditorTopbar";
+import WebViewer from "../../_components/WebViewer";
+import EditorComponentsSidebar from "../../_components/sidebars/EditorComponentsSidebar";
+import EditorElementsSidebar from "../../_components/sidebars/EditorElementsSidebar";
+import EditorGithubSidebar from "../../_components/sidebars/EditorGithubSidebar";
+import EditorLayersSidebar from "../../_components/sidebars/EditorLayersSidebar";
+import WebComponentEditorSidebar from "../../_components/sidebars/WebComponentEditorSidebar";
 
-export default function EditorPage({}: {
+export default function EditorPage({
+  params,
+}: {
   params: {
     pageId: string;
     siteId: string;
@@ -65,7 +66,7 @@ export default function EditorPage({}: {
         <div className="flex h-screen">
           <EditorSidebarSelector />
           <div className="flex h-full flex-col w-full">
-            <EditorTopbar />
+            <EditorTopbar params={params} />
             <div className="flex h-full m-2 gap-5 overflow-hidden">
               <ScrollArea className="bg-[#181826] w-[280px] p-2 h-full rounded-lg  border box-border">
                 {renderSidebar()}

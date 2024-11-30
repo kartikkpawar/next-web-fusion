@@ -1,4 +1,6 @@
+"use client";
 import EditorToolbarProvider from "@/components/providers/EditorToolbarsProvider";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 
 export default function EditorLayout({
@@ -6,9 +8,12 @@ export default function EditorLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const queryClient = new QueryClient();
   return (
-    <div className="h-screen w-full">
-      <EditorToolbarProvider>{children}</EditorToolbarProvider>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="h-screen w-full">
+        <EditorToolbarProvider>{children}</EditorToolbarProvider>
+      </div>
+    </QueryClientProvider>
   );
 }

@@ -1,7 +1,11 @@
 "use client";
+import { updatePageData } from "@/actions/userPages.action";
 import { contructElement } from "@/lib/helper";
 import { EditorElement } from "@/lib/types/global.types";
+import { useMutation } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface ElementProviderProps {
   children: React.ReactNode;
@@ -17,6 +21,7 @@ type ElementProviderDataType = {
     elementCategory: string;
     elementSubCategory: string;
   }) => void;
+
   saveElements: (newElements: EditorElement[]) => void;
   updateElement: (elementId: string, data: Partial<EditorElement>) => void;
   deleteElement: (elementId: string) => void;
@@ -51,6 +56,20 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     setIsMounted(true);
   }, []);
 
+  const params = useParams();
+
+  const updatePageMutation = useMutation({
+    mutationFn: updatePageData,
+    onSuccess: () => {
+      toast.success("Page updated successfully", { id: "page-toast" });
+    },
+    onError: (error) => {
+      toast.error(error.message || "Something went wrong", {
+        id: "page-toast",
+      });
+    },
+  });
+
   if (!isMounted) return null;
 
   const addElement = ({
@@ -69,17 +88,17 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     });
     setElements((prev) => {
       const updatedElements = [...prev, element];
-      saveElements(updatedElements);
+      // saveElements(updatedElements);
       return updatedElements;
     });
   };
 
-  const saveElements = (newElements: EditorElement[]) => {
-    if (!newElements || newElements.length === 0) {
-      console.error("No elements to save. Skipping save operation.");
-      return;
-    }
-    localStorage.setItem("elements-wdf", JSON.stringify(newElements));
+  const saveElements = (newElements?: EditorElement[]) => {
+    updatePageMutation.mutate({
+      elements: newElements || elements,
+      pageId: params.pageId as string,
+      siteId: params.siteId as string,
+    });
   };
 
   const updateElement = (elementId: string, data: Partial<EditorElement>) => {
@@ -87,7 +106,7 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
       const updatedElements = prevElements.map((element) =>
         element.id === elementId ? { ...element, ...data } : element
       );
-      saveElements(updatedElements); // Save updated elements to localStorage
+      // saveElements(updatedElements); // Save updated elements to localStorage
       return updatedElements;
     });
     if (elementId === currentActiveElement?.id) {
@@ -102,7 +121,7 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     }
     setElements((prevElements) => {
       const updatedElements = prevElements.toSpliced(eleIndex, 1);
-      saveElements(updatedElements);
+      // saveElements(updatedElements);
       return updatedElements;
     });
   };

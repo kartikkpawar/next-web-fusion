@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useMemo, useRef } from "react";
 import { EditorElement } from "../types/global.types";
 import { useElements } from "@/components/providers/ElementsProvider";
@@ -36,7 +37,7 @@ function RenderElement({ element }: { element: EditorElement }) {
       {
         id: element.id,
         className: cn(
-          element.className,
+          element?.className || "",
           currentActiveElement?.id === element.id &&
             "border border-primary box-border"
         ),
