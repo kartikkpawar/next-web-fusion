@@ -15,7 +15,7 @@ function WebComponentEditorSidebar() {
     );
     if (classIndex! > -1 || !currentActiveElement?.id) return;
     const eleClasses = currentActiveElement?.className
-      ? [...currentActiveElement?.className, `!${value}`]
+      ? [...currentActiveElement?.className, value]
       : [value];
     updateElement(currentActiveElement?.id, {
       className: eleClasses,
@@ -37,8 +37,6 @@ function WebComponentEditorSidebar() {
       className: filteredClasses,
     });
   };
-
-  // FIXME: Classname not taking effect
 
   return (
     currentActiveElement && (
