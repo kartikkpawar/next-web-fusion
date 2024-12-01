@@ -1,11 +1,11 @@
 "use client";
-import { updatePageData } from "@/actions/userPages.action";
+import { getPageElements, updatePageData } from "@/actions/userPages.action";
+import useDebounce from "@/hooks/use-debounce";
 import { contructElement } from "@/lib/helper";
 import { EditorElement } from "@/lib/types/global.types";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { toast } from "sonner";
 
 interface ElementProviderProps {
   children: React.ReactNode;
@@ -47,28 +47,33 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     useState<EditorElement | null>(null);
 
   useEffect(() => {
-    const localElements = localStorage.getItem("elements-wdf");
-    const parsedElements = localElements ? JSON.parse(localElements) : [];
-    setElements(parsedElements as EditorElement[]);
-  }, []);
-
-  useEffect(() => {
     setIsMounted(true);
   }, []);
 
   const params = useParams();
 
-  const updatePageMutation = useMutation({
+  const data = useQuery({
+    queryKey: ["page-data", params?.pageId],
+    queryFn: () => getPageElements(params?.pageId as string),
+  });
+
+  const updateDataMutation = useMutation({
     mutationFn: updatePageData,
     onSuccess: () => {
-      toast.success("Page updated successfully", { id: "page-toast" });
+      console.log("Updated Successfully");
     },
     onError: (error) => {
-      toast.error(error.message || "Something went wrong", {
-        id: "page-toast",
-      });
+      console.log(error.message);
     },
   });
+
+  const saveDebounce = useDebounce(updateDataMutation.mutate, 800);
+
+  useEffect(() => {
+    if (!data.data) return setElements([]);
+    const parsedElements = JSON.parse(data.data?.elements);
+    setElements(parsedElements);
+  }, [data.data]);
 
   if (!isMounted) return null;
 
@@ -88,16 +93,16 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     });
     setElements((prev) => {
       const updatedElements = [...prev, element];
-      // saveElements(updatedElements);
+      saveElements(updatedElements);
       return updatedElements;
     });
   };
 
   const saveElements = (newElements?: EditorElement[]) => {
-    updatePageMutation.mutate({
+    saveDebounce({
       elements: newElements || elements,
-      pageId: params.pageId as string,
-      siteId: params.siteId as string,
+      pageId: params?.pageId as string,
+      siteId: params?.siteId as string,
     });
   };
 
@@ -106,7 +111,7 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
       const updatedElements = prevElements.map((element) =>
         element.id === elementId ? { ...element, ...data } : element
       );
-      // saveElements(updatedElements); // Save updated elements to localStorage
+      saveElements(updatedElements);
       return updatedElements;
     });
     if (elementId === currentActiveElement?.id) {
@@ -121,7 +126,7 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     }
     setElements((prevElements) => {
       const updatedElements = prevElements.toSpliced(eleIndex, 1);
-      // saveElements(updatedElements);
+      saveElements(updatedElements);
       return updatedElements;
     });
   };

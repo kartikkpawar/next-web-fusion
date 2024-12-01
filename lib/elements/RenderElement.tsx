@@ -1,4 +1,3 @@
-"use client";
 import React, { useCallback, useMemo, useRef } from "react";
 import { EditorElement } from "../types/global.types";
 import { useElements } from "@/components/providers/ElementsProvider";

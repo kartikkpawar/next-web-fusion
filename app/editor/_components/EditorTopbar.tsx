@@ -1,37 +1,18 @@
 "use client";
-import { updatePageData } from "@/actions/userPages.action";
 import { useEditorToolbars } from "@/components/providers/EditorToolbarsProvider";
-import { useElements } from "@/components/providers/ElementsProvider";
 import TooltipWrapper from "@/components/TooltipWrapper";
 import { Button } from "@/components/ui/button";
 import { devices } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { useMutation } from "@tanstack/react-query";
-import { CheckIcon, Code, Eye } from "lucide-react";
-import { toast } from "sonner";
+import { Code, Eye } from "lucide-react";
 
-function EditorTopbar({
-  params,
-}: {
+function EditorTopbar({}: {
   params: {
     pageId: string;
     siteId: string;
   };
 }) {
   const { setTopbarDevice, topbarDevice } = useEditorToolbars();
-  const { elements } = useElements();
-
-  const updatePageMutation = useMutation({
-    mutationFn: updatePageData,
-    onSuccess: () => {
-      toast.success("Page updated successfully", { id: "page-toast" });
-    },
-    onError: (error) => {
-      toast.error(error.message || "Something went wrong", {
-        id: "page-toast",
-      });
-    },
-  });
 
   return (
     <div className="w-full flex px-3 gap-5 border-b border-separate bg-[#181826] h-max py-2">
@@ -63,19 +44,10 @@ function EditorTopbar({
         ))}
       </div>
       <div className="flex items-center gap-3">
-        <Button
-          variant={"outline"}
-          onClick={() => {
-            updatePageMutation.mutate({
-              elements,
-              pageId: params.pageId,
-              siteId: params.siteId,
-            });
-          }}
-        >
+        {/* <Button variant={"outline"} onClick={saveElements}>
           <CheckIcon />
           Save
-        </Button>
+        </Button> */}
         <Button variant={"outline"}>
           <Eye />
           Preview

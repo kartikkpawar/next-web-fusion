@@ -34,7 +34,7 @@ export default function EditorPage({
       case "elements":
         return <EditorElementsSidebar />;
       case "layers":
-        return <EditorLayersSidebar />;
+        return <EditorLayersSidebar pageId={params.pageId} />;
       case "components":
         return <EditorComponentsSidebar />;
       case "git":
@@ -71,7 +71,7 @@ export default function EditorPage({
               <ScrollArea className="bg-[#181826] w-[280px] p-2 h-full rounded-lg  border box-border">
                 {renderSidebar()}
               </ScrollArea>
-              <WebViewer />
+              <WebViewer pageId={params.pageId} siteId={params.siteId} />
               <ScrollArea className="bg-[#181826] w-[280px] p-2 h-full rounded-lg  border box-border">
                 <WebComponentEditorSidebar />
               </ScrollArea>

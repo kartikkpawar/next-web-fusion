@@ -1,9 +1,10 @@
+"use client";
 import { useElements } from "@/components/providers/ElementsProvider";
-import React from "react";
 import LayerItem from "../LayerItem";
 
-function EditorLayersSidebar() {
+function EditorLayersSidebar({}: { pageId: string }) {
   const { elements } = useElements();
+
   return (
     <div className="flex flex-col gap-2">
       {elements.map((element) => (

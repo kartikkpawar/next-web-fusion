@@ -1,19 +1,28 @@
 "use client";
 import { useElements } from "@/components/providers/ElementsProvider";
-import RenderElement from "@/lib/elements/RenderElement";
 import { cn } from "@/lib/utils";
 import { DragEndEvent, useDndMonitor, useDroppable } from "@dnd-kit/core";
-import React from "react";
+import { useEffect, useRef } from "react";
 
-function WebViewer() {
+function WebViewer({ pageId, siteId }: { pageId: string; siteId: string }) {
   const droppable = useDroppable({
     id: "webBuilder-drop-area",
     data: {
       isDropArea: true,
     },
   });
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const { addElement, elements } = useElements();
+
+  useEffect(() => {
+    if (iframeRef.current) {
+      iframeRef.current.contentWindow?.postMessage({
+        type: "elementsUpdated",
+        data: elements,
+      });
+    }
+  }, [elements]);
 
   useDndMonitor({
     onDragEnd: (event: DragEndEvent) => {
@@ -38,10 +47,11 @@ function WebViewer() {
       )}
       ref={droppable.setNodeRef}
     >
-      {elements.map((element) => (
-        <RenderElement key={element.id} element={element} />
-      ))}
-      {/* <iframe src="/editor/webview" className="w-full h-full"></iframe> */}
+      <iframe
+        ref={iframeRef}
+        src={`/editor/${siteId}/${pageId}/pageview`}
+        className="w-full h-full"
+      ></iframe>
     </div>
   );
 }

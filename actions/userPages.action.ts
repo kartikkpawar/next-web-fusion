@@ -171,3 +171,20 @@ export async function updatePageData({
   });
   revalidatePath(`/editor/${siteId}/${pageId}`);
 }
+
+export async function getPageElements(id: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Not Authenticated");
+  }
+
+  return await prisma.page.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      elements: true,
+    },
+  });
+}
