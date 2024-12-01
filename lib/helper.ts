@@ -35,5 +35,6 @@ export function contructElement({
     category: elementCategory,
     subCategory: elementSubCategory,
     className: [],
+    children: [],
   };
 }

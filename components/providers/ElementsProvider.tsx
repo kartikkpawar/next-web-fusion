@@ -16,10 +16,12 @@ type ElementProviderDataType = {
     elementType,
     elementCategory,
     elementSubCategory,
+    addTo,
   }: {
     elementType: string;
     elementCategory: string;
     elementSubCategory: string;
+    addTo?: string;
   }) => void;
 
   saveElements: (newElements: EditorElement[]) => void;
@@ -81,18 +83,43 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     elementType,
     elementCategory,
     elementSubCategory,
+    addTo,
   }: {
     elementType: string;
     elementCategory: string;
     elementSubCategory: string;
+    addTo?: string;
   }) => {
     const element = contructElement({
       elementType,
       elementCategory,
       elementSubCategory,
     });
+    if (addTo) {
+      multiLevelAdd(addTo, element);
+      return;
+    }
+
     setElements((prev) => {
       const updatedElements = [...prev, element];
+      saveElements(updatedElements);
+      return updatedElements;
+    });
+  };
+
+  const multiLevelAdd = (addToId: string, newElement: EditorElement) => {
+    setElements((prevElements) => {
+      const updatedElements = prevElements.map((element) => {
+        if (element.id === addToId) {
+          const elePresent = element.children?.findIndex(
+            (ele) => ele.id === newElement.id
+          );
+          if (elePresent! > -1) return element;
+
+          element.children?.push(newElement);
+        }
+        return element;
+      });
       saveElements(updatedElements);
       return updatedElements;
     });

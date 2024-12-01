@@ -45,7 +45,8 @@ function WebComponentEditorSidebar() {
         key={currentActiveElement.id}
       >
         {(currentActiveElement?.data ||
-          currentActiveElement?.subCategory === "Text") && (
+          currentActiveElement?.subCategory === "Text" ||
+          currentActiveElement?.subCategory === "TextInput") && (
           <Textarea
             rows={10}
             value={currentActiveElement.data}

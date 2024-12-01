@@ -51,7 +51,13 @@ const getCategoryIcon = (category: string) => {
   }
 };
 
-function EditorElementsSidebar() {
+function EditorElementsSidebar({
+  isNotDraggable,
+  currElementId,
+}: {
+  isNotDraggable?: boolean;
+  currElementId: string;
+}) {
   const groupedElements: HtmlElementsCollection = useMemo(
     () =>
       elementsList.reduce<HtmlElementsCollection>((acc, element) => {
@@ -92,6 +98,8 @@ function EditorElementsSidebar() {
                         title={element.title}
                         category={category}
                         subCategory={element.subCategory}
+                        isNotDraggable={isNotDraggable}
+                        currElementId={currElementId}
                       />
                     </TooltipWrapper>
                   ))}
