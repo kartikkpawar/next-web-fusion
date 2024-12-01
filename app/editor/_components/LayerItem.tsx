@@ -56,7 +56,7 @@ function LayerItem({
     >
       <Icon size={16} />
       <span className="text-sm text-ellipsis w-full overflow-hidden text-left">
-        {element.tag} - {element.data}
+        {element.tag} {element.data && " - " + element.data}
       </span>
       <DropdownMenu>
         <DropdownMenuTrigger onClick={(e) => e.stopPropagation()}>

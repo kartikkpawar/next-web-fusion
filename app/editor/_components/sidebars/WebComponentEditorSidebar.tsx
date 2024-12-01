@@ -29,7 +29,6 @@ function WebComponentEditorSidebar() {
     );
 
     if (classIndex! === -1 || !currentActiveElement?.id) return;
-    console.log(classIndex);
     const filteredClasses = currentActiveElement.className?.toSpliced(
       classIndex!,
       1
