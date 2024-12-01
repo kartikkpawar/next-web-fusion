@@ -149,11 +149,6 @@ export async function updatePageData({
       userId,
     },
   });
-  console.log({
-    id: pageId,
-    siteId,
-    userId,
-  });
 
   if (!pagePresent) {
     throw new Error("Page not found, Try again after sometime");
