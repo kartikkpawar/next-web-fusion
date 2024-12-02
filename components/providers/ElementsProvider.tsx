@@ -96,7 +96,8 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
       elementSubCategory,
     });
     if (addTo) {
-      multiLevelAdd(addTo, element);
+      mlAddHelper(elements, addTo, element);
+      saveElements(elements);
       return;
     }
 
@@ -107,22 +108,20 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     });
   };
 
-  const multiLevelAdd = (addToId: string, newElement: EditorElement) => {
-    setElements((prevElements) => {
-      const updatedElements = prevElements.map((element) => {
-        if (element.id === addToId) {
-          const elePresent = element.children?.findIndex(
-            (ele) => ele.id === newElement.id
-          );
-          if (elePresent! > -1) return element;
-
-          element.children?.push(newElement);
-        }
-        return element;
-      });
-      saveElements(updatedElements);
-      return updatedElements;
-    });
+  const mlAddHelper = (
+    allEelements: EditorElement[],
+    eleId: string,
+    modElement: EditorElement
+  ) => {
+    for (let eleIndex = 0; eleIndex < allEelements.length; eleIndex++) {
+      const element = allEelements[eleIndex];
+      if (eleId === element.id) {
+        element.children?.push(modElement);
+        break;
+      }
+      if (!element.children) continue;
+      mlAddHelper(element.children, eleId, modElement);
+    }
   };
 
   const saveElements = (newElements?: EditorElement[]) => {
