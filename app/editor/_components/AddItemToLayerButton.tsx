@@ -6,13 +6,23 @@ import {
 import { PlusIcon } from "lucide-react";
 import EditorElementsSidebar from "./sidebars/EditorElementsSidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 
-function AddItemToLayerButton({ currElementId }: { currElementId: string }) {
+function AddItemToLayerButton({
+  currElementId,
+  showAdd,
+}: {
+  currElementId: string;
+  showAdd: boolean;
+}) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger onClick={(e) => e.stopPropagation()}>
+      <DropdownMenuTrigger
+        onClick={(e) => e.stopPropagation()}
+        className={cn("opacity-0", showAdd && "opacity-100")}
+      >
         <div
-          className="-bottom-2 left-[50%] translate-x-[-50%] !absolute flex items-center z-10"
+          className="flex items-center z-10 -bottom-2 left-[50%] translate-x-[-50%] !absolute"
           onClick={(e) => {
             e.stopPropagation();
           }}

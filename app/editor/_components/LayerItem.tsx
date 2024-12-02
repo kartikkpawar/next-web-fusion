@@ -40,7 +40,7 @@ function LayerItem({
   const { setCurrentActiveElement, currentActiveElement, deleteElement } =
     useElements();
 
-  const [showAdd, setShowAdd] = useState(false);
+  const [showAdd, setShowAdd] = useState(true);
 
   const onRightClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
@@ -77,7 +77,7 @@ function LayerItem({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {showAdd && <AddItemToLayerButton currElementId={element.id} />}
+        <AddItemToLayerButton currElementId={element.id} showAdd={showAdd} />
       </Button>
 
       {element.children?.map((element) => (
