@@ -97,6 +97,7 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     });
     if (addTo) {
       mlAddHelper(elements, addTo, element);
+      setElements(elements);
       saveElements(elements);
       return;
     }
@@ -133,16 +134,31 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
   };
 
   const updateElement = (elementId: string, data: Partial<EditorElement>) => {
-    setElements((prevElements) => {
-      const updatedElements = prevElements.map((element) =>
-        element.id === elementId ? { ...element, ...data } : element
-      );
-      saveElements(updatedElements);
-      return updatedElements;
-    });
     if (elementId === currentActiveElement?.id) {
       setCurrentActiveElement({ ...currentActiveElement, ...data });
     }
+    const eleCopy = JSON.stringify(elements);
+    const updateEle = updateMlElement(JSON.parse(eleCopy), elementId, data);
+    setElements(updateEle);
+    saveElements(updateEle);
+  };
+
+  const updateMlElement = (
+    allEelements: EditorElement[],
+    eleId: string,
+    data: Partial<EditorElement>
+  ) => {
+    for (let eleIndex = 0; eleIndex < allEelements.length; eleIndex++) {
+      let element = allEelements[eleIndex];
+      if (eleId === element.id) {
+        element = { ...element, ...data };
+        allEelements[eleIndex] = element;
+        break;
+      }
+      if (!element.children) continue;
+      updateMlElement(element.children, eleId, data);
+    }
+    return allEelements;
   };
 
   const deleteElement = (elementId: string) => {
