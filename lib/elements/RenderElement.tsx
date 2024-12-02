@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { Fragment, useCallback, useMemo, useRef } from "react";
 import { EditorElement } from "../types/global.types";
 import { useElements } from "@/components/providers/ElementsProvider";
 import { cn } from "../utils";
@@ -29,6 +29,7 @@ function RenderElement({ element }: { element: EditorElement }) {
       updateElement(element.id, { data: newText });
     }
   }, [element.id, updateElement]);
+  console.log(element.tag, "element_tag");
 
   const CustomReactComponent = useMemo(() => {
     return React.createElement(
@@ -46,7 +47,12 @@ function RenderElement({ element }: { element: EditorElement }) {
         onClick,
         onBlur,
       },
-      element.data || ""
+      <Fragment>
+        {element.data || ""}
+        {element.children?.map((children) => (
+          <RenderElement element={children} key={children.id} />
+        ))}
+      </Fragment>
     );
   }, [
     element.tag,
@@ -55,6 +61,7 @@ function RenderElement({ element }: { element: EditorElement }) {
     element.data,
     onBlur,
     currentActiveElement,
+    element.children,
   ]);
 
   return CustomReactComponent;
