@@ -162,15 +162,31 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
   };
 
   const deleteElement = (elementId: string) => {
-    const eleIndex = elements.findIndex((element) => element.id === elementId);
+    const eleCopy = JSON.stringify(elements);
+    const updateEle = deleteMLElement(JSON.parse(eleCopy), elementId);
+    setElements(updateEle);
+    saveElements(updateEle);
     if (currentActiveElement?.id === elementId) {
       setCurrentActiveElement(null);
     }
-    setElements((prevElements) => {
-      const updatedElements = prevElements.toSpliced(eleIndex, 1);
-      saveElements(updatedElements);
-      return updatedElements;
-    });
+  };
+
+  const deleteMLElement = (allEelements: EditorElement[], eleId: string) => {
+    const isElePresent = allEelements.findIndex(
+      (element) => element.id === eleId
+    );
+
+    if (isElePresent > -1) {
+      allEelements.splice(isElePresent, 1);
+    }
+
+    for (let eleIndex = 0; eleIndex < allEelements.length; eleIndex++) {
+      const element = allEelements[eleIndex];
+      if (!element.children) continue;
+      deleteMLElement(element.children, eleId);
+    }
+
+    return allEelements;
   };
 
   return (
