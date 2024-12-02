@@ -12,7 +12,7 @@ function AddItemToLayerButton({ currElementId }: { currElementId: string }) {
     <DropdownMenu>
       <DropdownMenuTrigger onClick={(e) => e.stopPropagation()}>
         <div
-          className="-bottom-2 left-[50%] translate-x-[-50%] !absolute border flex items-center"
+          className="-bottom-2 left-[50%] translate-x-[-50%] !absolute flex items-center z-10"
           onClick={(e) => {
             e.stopPropagation();
           }}
