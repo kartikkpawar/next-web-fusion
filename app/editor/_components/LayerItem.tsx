@@ -40,7 +40,7 @@ function LayerItem({
   const { setCurrentActiveElement, currentActiveElement, deleteElement } =
     useElements();
 
-  const [showAdd, setShowAdd] = useState(true);
+  const [showAdd, setShowAdd] = useState(false);
 
   const onRightClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();

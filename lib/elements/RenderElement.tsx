@@ -25,11 +25,9 @@ function RenderElement({ element }: { element: EditorElement }) {
     if (customElementRef.current) {
       customElementRef.current.contentEditable = "false";
       const newText = customElementRef.current.textContent || "";
-      console.log("Blurred content:", newText);
       updateElement(element.id, { data: newText });
     }
   }, [element.id, updateElement]);
-  console.log(element.tag, "element_tag");
 
   const CustomReactComponent = useMemo(() => {
     return React.createElement(

@@ -38,3 +38,16 @@ export function contructElement({
     children: [],
   };
 }
+
+export function remToPx(value: string) {
+  const isRemVal = value.endsWith("rem");
+  const remVal = value.split("rem")[0];
+  if (!isRemVal) {
+    const isPxVal = value.endsWith("px");
+    if (isPxVal) return value.split("px")[0];
+    return value;
+  }
+
+  if (isNaN(parseFloat(remVal))) return value;
+  return (parseFloat(remVal) * 16).toString();
+}
