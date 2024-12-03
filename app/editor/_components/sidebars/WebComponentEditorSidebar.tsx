@@ -10,7 +10,7 @@ import { parseClassString } from "@toddledev/tailwind-parser";
 import { XIcon } from "lucide-react";
 import React, { useState } from "react";
 
-type BoxModelParams = "margin" | "border" | "padding";
+type BoxModelParams = "margin" | "border-width" | "padding";
 
 function WebComponentEditorSidebar() {
   const { currentActiveElement, updateElement } = useElements();
@@ -118,10 +118,10 @@ function WebComponentEditorSidebar() {
             values={stylesGetter("margin")}
           >
             <BoxModel
-              mode="border"
+              mode="border-width"
               selectedMode={boxStyleSelected}
               onSelect={(mode: BoxModelParams) => setBoxStyleSelected(mode)}
-              values={stylesGetter("border")}
+              values={stylesGetter("border-width")}
             >
               <BoxModel
                 mode="padding"
@@ -159,8 +159,8 @@ function BoxModel({
   return (
     <div
       className={cn(
-        "w-full p-5 px-6 rounded-md flex flex-col items-start border-dashed hover:cursor-pointer select-none relative box-border border-2",
-        selectedMode === mode && "border-solid border-primary"
+        "w-full p-5 px-6 rounded-md flex flex-col items-start border-dashed hover:cursor-pointer select-none relative box-border border-2 bg-secondary/50",
+        selectedMode === mode && "border-solid border-primary bg-primary/10"
       )}
       onClick={(e) => {
         onSelect(mode);
@@ -169,7 +169,7 @@ function BoxModel({
     >
       <span
         className={cn(
-          "text-muted-foreground text-[8px] -mt-2 mb-2 -ml-3 block uppercase",
+          "text-muted-foreground text-[8px] -mt-3 mb-1 -ml-3 block uppercase",
           selectedMode === mode && "text-primary"
         )}
       >
@@ -177,7 +177,7 @@ function BoxModel({
       </span>
       <span
         className={cn(
-          "absolute top-3 right-[45%] text-[8px] text-muted-foreground",
+          "absolute top-2 right-[45%] text-[10px] text-muted-foreground",
           selectedMode === mode && "text-primary-foreground"
         )}
       >
@@ -185,7 +185,7 @@ function BoxModel({
       </span>
       <span
         className={cn(
-          "absolute right-1 top-[45%] text-[8px] text-muted-foreground",
+          "absolute right-1 top-[45%] text-[10px] text-muted-foreground",
           selectedMode === mode && "text-primary-foreground"
         )}
       >
@@ -193,7 +193,7 @@ function BoxModel({
       </span>
       <span
         className={cn(
-          "absolute bottom-1 right-[45%] text-[8px] text-muted-foreground",
+          "absolute bottom-1 right-[45%] text-[10px] text-muted-foreground",
           selectedMode === mode && "text-primary-foreground"
         )}
       >
@@ -201,7 +201,7 @@ function BoxModel({
       </span>
       <span
         className={cn(
-          "absolute left-1 top-[45%] text-[8px] text-muted-foreground",
+          "absolute left-1 top-[45%] text-[10px] text-muted-foreground",
           selectedMode === mode && "text-primary-foreground"
         )}
       >
