@@ -3,6 +3,7 @@ import { useEditorToolbars } from "@/components/providers/EditorToolbarsProvider
 import ElementsProvider from "@/components/providers/ElementsProvider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
+  closestCenter,
   DndContext,
   MouseSensor,
   TouchSensor,
@@ -62,7 +63,7 @@ export default function EditorPage({
 
   return (
     <ElementsProvider>
-      <DndContext sensors={sensors}>
+      <DndContext sensors={sensors} collisionDetection={closestCenter}>
         <div className="flex h-screen">
           <EditorSidebarSelector />
           <div className="flex h-full flex-col w-full">

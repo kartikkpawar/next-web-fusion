@@ -30,6 +30,13 @@ type ElementProviderDataType = {
   setCurrentActiveElement: (element: EditorElement) => void;
   elements: EditorElement[];
   currentActiveElement: EditorElement | null;
+  dndLayerItem: ({
+    to,
+    element,
+  }: {
+    to: string;
+    element: EditorElement;
+  }) => void;
 };
 
 export const EditorContext = createContext<ElementProviderDataType>({
@@ -40,6 +47,7 @@ export const EditorContext = createContext<ElementProviderDataType>({
   setCurrentActiveElement: () => {},
   currentActiveElement: null,
   elements: [],
+  dndLayerItem: () => {},
 });
 
 const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
@@ -73,8 +81,13 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (!data.data) return setElements([]);
-    const parsedElements = JSON.parse(data.data?.elements);
-    setElements(parsedElements);
+    try {
+      const parsedElements = JSON.parse(data.data?.elements);
+      setElements(parsedElements);
+    } catch (error) {
+      console.log(error);
+      setElements([]);
+    }
   }, [data.data]);
 
   if (!isMounted) return null;
@@ -96,7 +109,7 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
       elementSubCategory,
     });
     if (addTo) {
-      mlAddHelper(elements, addTo, element);
+      addMlElement(elements, addTo, element);
       setElements(elements);
       saveElements(elements);
       return;
@@ -109,19 +122,19 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     });
   };
 
-  const mlAddHelper = (
+  const addMlElement = (
     allEelements: EditorElement[],
     eleId: string,
-    modElement: EditorElement
+    toAddElement: EditorElement
   ) => {
     for (let eleIndex = 0; eleIndex < allEelements.length; eleIndex++) {
       const element = allEelements[eleIndex];
       if (eleId === element.id) {
-        element.children?.push(modElement);
+        element.children?.push(toAddElement);
         break;
       }
       if (!element.children) continue;
-      mlAddHelper(element.children, eleId, modElement);
+      addMlElement(element.children, eleId, toAddElement);
     }
   };
 
@@ -189,6 +202,20 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     return allEelements;
   };
 
+  const dndLayerItem = ({
+    to,
+    element,
+  }: {
+    to: string;
+    element: EditorElement;
+  }) => {
+    const eleCopy = JSON.stringify(elements);
+    const updatedElements = deleteMLElement(JSON.parse(eleCopy), element.id);
+    addMlElement(updatedElements, to, element);
+    setElements(updatedElements);
+    saveElements(updatedElements);
+  };
+
   return (
     <EditorContext.Provider
       value={{
@@ -199,6 +226,7 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
         setCurrentActiveElement,
         currentActiveElement,
         deleteElement,
+        dndLayerItem,
       }}
     >
       {children}

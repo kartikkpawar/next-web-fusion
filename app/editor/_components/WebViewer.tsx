@@ -8,7 +8,7 @@ function WebViewer({ pageId, siteId }: { pageId: string; siteId: string }) {
   const droppable = useDroppable({
     id: "webBuilder-drop-area",
     data: {
-      isDropArea: true,
+      isElementsDropArea: true,
     },
   });
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -29,8 +29,9 @@ function WebViewer({ pageId, siteId }: { pageId: string; siteId: string }) {
       const { active, over } = event;
       if (!active || !over) return;
 
-      const isOverdroppingArea = over?.data?.current?.isDropArea;
+      const isOverdroppingArea = over?.data?.current?.isElementsDropArea;
       if (isOverdroppingArea) {
+        if (active.data.current?.isLayerElement) return;
         addElement({
           elementType: active.data.current?.type,
           elementCategory: active.data.current?.category,
@@ -43,7 +44,9 @@ function WebViewer({ pageId, siteId }: { pageId: string; siteId: string }) {
     <div
       className={cn(
         "flex-1 h-full border-2 border-transparent rounded-lg",
-        droppable.isOver && "border-white"
+        droppable.isOver &&
+          !droppable.active?.data?.current?.isLayerElement &&
+          "border-white"
       )}
       ref={droppable.setNodeRef}
     >

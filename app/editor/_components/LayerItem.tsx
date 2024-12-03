@@ -19,6 +19,12 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 import AddItemToLayerButton from "./AddItemToLayerButton";
+import {
+  DragEndEvent,
+  useDndMonitor,
+  useDraggable,
+  useDroppable,
+} from "@dnd-kit/core";
 
 const elementIcons = {
   Structure: Layout,
@@ -37,8 +43,12 @@ function LayerItem({
   element: EditorElement;
   depth: number;
 }) {
-  const { setCurrentActiveElement, currentActiveElement, deleteElement } =
-    useElements();
+  const {
+    setCurrentActiveElement,
+    currentActiveElement,
+    deleteElement,
+    dndLayerItem,
+  } = useElements();
 
   const [showAdd, setShowAdd] = useState(false);
 
@@ -48,23 +58,63 @@ function LayerItem({
 
   const Icon = elementIcons[element.category as ElementCategory] || Square;
 
+  const draggable = useDraggable({
+    id: element.id,
+    data: {
+      element,
+      isLayerElement: true,
+    },
+  });
+  const droppable = useDroppable({
+    id: element.id,
+    data: {
+      isLayerDroppablElement: true,
+      element,
+    },
+  });
+
+  useDndMonitor({
+    onDragEnd: (event: DragEndEvent) => {
+      const { active, over } = event;
+      if (!active || !over) return;
+
+      const isOverdroppingArea = over?.data?.current?.isLayerDroppablElement;
+      if (isOverdroppingArea && over.id !== active.data.current?.element.id) {
+        dndLayerItem({
+          to: over.id as string,
+          element: active.data.current?.element as EditorElement,
+        });
+      }
+    },
+  });
+
   return (
-    <div>
+    <div ref={droppable.setNodeRef}>
       <Button
         onClick={() => setCurrentActiveElement(element)}
         className={cn(
-          "bg-transparent flex-row justify-start max-w-[260px] w-full relative hover:bg-primary/20",
+          "bg-transparent flex-row justify-start max-w-[260px] w-full relative hover:bg-primary/20 border border-transparent",
           currentActiveElement?.id === element.id &&
-            "bg-primary hover:bg-primary"
+            "bg-primary hover:bg-primary",
+          droppable.isOver &&
+            currentActiveElement?.id === element.id &&
+            "border-white",
+          droppable.isOver &&
+            currentActiveElement?.id !== element.id &&
+            "border-primary"
         )}
         style={{ paddingLeft: `${depth * 16 + 8}px` }}
         onContextMenu={onRightClick}
         onMouseEnter={() => setShowAdd(true)}
         onMouseLeave={() => setShowAdd(false)}
+        {...draggable.listeners}
+        {...draggable.attributes}
+        ref={draggable.setNodeRef}
       >
         <Icon size={16} />
         <span className="text-sm text-ellipsis w-full overflow-hidden text-left">
-          {element.tag} {element.data && " - " + element.data}{" "}
+          {element.tag} {element.data && " - " + element.data}
+          {" - " + element.id}
         </span>
         <DropdownMenu>
           <DropdownMenuTrigger onClick={(e) => e.stopPropagation()}>
@@ -80,8 +130,12 @@ function LayerItem({
         <AddItemToLayerButton currElementId={element.id} showAdd={showAdd} />
       </Button>
 
-      {element.children?.map((element) => (
-        <LayerItem depth={depth + 1} element={element} key={element.id} />
+      {element.children?.map((childElement) => (
+        <LayerItem
+          depth={depth + 1}
+          element={childElement}
+          key={childElement.id}
+        />
       ))}
     </div>
   );

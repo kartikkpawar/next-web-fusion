@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Active, DragOverlay, useDndMonitor } from "@dnd-kit/core";
 import DraggableElementOverlay from "./DraggableElementOverlay";
+import DraggableLayerItemOverlay from "./DraggableOverlayLayerItem";
 
 function DragOverlayWrapper() {
   const [draggedElement, setDraggedElement] = useState<Active | null>(null);
@@ -21,9 +22,12 @@ function DragOverlayWrapper() {
   if (!draggedElement) return <></>;
 
   const data = draggedElement?.data.current;
-  const node = (
-    <DraggableElementOverlay title={data?.title} type={data?.type} />
-  );
+
+  let node = <DraggableElementOverlay title={data?.title} type={data?.type} />;
+
+  if (data?.isLayerElement) {
+    node = <DraggableLayerItemOverlay depth={0} element={data.element} />;
+  }
 
   return <DragOverlay>{node}</DragOverlay>;
 }

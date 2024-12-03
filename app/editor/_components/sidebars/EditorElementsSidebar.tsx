@@ -56,7 +56,7 @@ function EditorElementsSidebar({
   currElementId,
 }: {
   isNotDraggable?: boolean;
-  currElementId: string;
+  currElementId?: string;
 }) {
   const groupedElements: HtmlElementsCollection = useMemo(
     () =>
