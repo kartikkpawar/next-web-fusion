@@ -84,7 +84,7 @@ export default function Pageview({
   }
 
   return (
-    <html>
+    <html className="dark">
       <head>
         <script src="https://cdn.tailwindcss.com/3.4.1" async />
       </head>

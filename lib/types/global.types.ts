@@ -35,3 +35,5 @@ export type EditorElement = {
   subCategory: string;
   category: string;
 };
+
+export type BoxModelParams = "margin" | "border-width" | "padding";

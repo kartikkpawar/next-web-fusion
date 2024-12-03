@@ -5,12 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { remToPx } from "@/lib/helper";
+import { BoxModelParams } from "@/lib/types/global.types";
 import { cn } from "@/lib/utils";
 import { parseClassString } from "@toddledev/tailwind-parser";
 import { XIcon } from "lucide-react";
 import React, { useState } from "react";
-
-type BoxModelParams = "margin" | "border-width" | "padding";
+import BoxModel from "../BoxModel";
 
 function WebComponentEditorSidebar() {
   const { currentActiveElement, updateElement } = useElements();
@@ -97,7 +97,7 @@ function WebComponentEditorSidebar() {
         />
         <div className="flex flex-wrap gap-2">
           {currentActiveElement?.className?.map((className) => (
-            <Badge key={className}>
+            <Badge key={className} className="bg-primary/20 text-foreground">
               {className}{" "}
               <XIcon
                 size={13}
@@ -110,7 +110,6 @@ function WebComponentEditorSidebar() {
         <Separator />
         <div className="flex mt-10 flex-col gap-3">
           <span className="text-sm">Box Model</span>
-          {/* in case of rem convert to px and show */}
           <BoxModel
             mode="margin"
             selectedMode={boxStyleSelected}
@@ -142,73 +141,3 @@ function WebComponentEditorSidebar() {
 }
 
 export default WebComponentEditorSidebar;
-
-function BoxModel({
-  children,
-  selectedMode,
-  onSelect,
-  mode,
-  values,
-}: {
-  children: React.ReactNode;
-  selectedMode: BoxModelParams;
-  onSelect: (mode: BoxModelParams) => void;
-  mode: BoxModelParams;
-  values?: string[];
-}) {
-  return (
-    <div
-      className={cn(
-        "w-full p-5 px-6 rounded-md flex flex-col items-start border-dashed hover:cursor-pointer select-none relative box-border border-2 bg-secondary/50",
-        selectedMode === mode && "border-solid border-primary bg-primary/10"
-      )}
-      onClick={(e) => {
-        onSelect(mode);
-        e.stopPropagation();
-      }}
-    >
-      <span
-        className={cn(
-          "text-muted-foreground text-[8px] -mt-3 mb-1 -ml-3 block uppercase",
-          selectedMode === mode && "text-primary"
-        )}
-      >
-        {mode}
-      </span>
-      <span
-        className={cn(
-          "absolute top-2 right-[45%] text-[10px] text-muted-foreground",
-          selectedMode === mode && "text-primary-foreground"
-        )}
-      >
-        {values?.[0]}
-      </span>
-      <span
-        className={cn(
-          "absolute right-1 top-[45%] text-[10px] text-muted-foreground",
-          selectedMode === mode && "text-primary-foreground"
-        )}
-      >
-        {values?.[1]}
-      </span>
-      <span
-        className={cn(
-          "absolute bottom-1 right-[45%] text-[10px] text-muted-foreground",
-          selectedMode === mode && "text-primary-foreground"
-        )}
-      >
-        {values?.[2]}
-      </span>
-      <span
-        className={cn(
-          "absolute left-1 top-[45%] text-[10px] text-muted-foreground",
-          selectedMode === mode && "text-primary-foreground"
-        )}
-      >
-        {values?.[3]}
-      </span>
-
-      {children}
-    </div>
-  );
-}
