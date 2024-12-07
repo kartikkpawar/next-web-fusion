@@ -51,6 +51,7 @@ function LayerItem({
   } = useElements();
 
   const [showAdd, setShowAdd] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const onRightClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
@@ -91,7 +92,10 @@ function LayerItem({
   return (
     <div ref={droppable.setNodeRef}>
       <Button
-        onClick={() => setCurrentActiveElement(element)}
+        onClick={() => {
+          setCurrentActiveElement(element);
+          setIsOpen((prev) => !prev);
+        }}
         className={cn(
           "bg-transparent flex-row justify-start max-w-[260px] w-full relative hover:bg-primary/20 border border-transparent",
           currentActiveElement?.id === element.id &&
@@ -114,7 +118,6 @@ function LayerItem({
         <Icon size={16} />
         <span className="text-sm text-ellipsis w-full overflow-hidden text-left">
           {element.tag} {element.data && " - " + element.data}
-          {" - " + element.id}
         </span>
         <DropdownMenu>
           <DropdownMenuTrigger onClick={(e) => e.stopPropagation()}>
@@ -130,13 +133,14 @@ function LayerItem({
         <AddItemToLayerButton currElementId={element.id} showAdd={showAdd} />
       </Button>
 
-      {element.children?.map((childElement) => (
-        <LayerItem
-          depth={depth + 1}
-          element={childElement}
-          key={childElement.id}
-        />
-      ))}
+      {isOpen &&
+        element.children?.map((childElement) => (
+          <LayerItem
+            depth={depth + 1}
+            element={childElement}
+            key={childElement.id}
+          />
+        ))}
     </div>
   );
 }

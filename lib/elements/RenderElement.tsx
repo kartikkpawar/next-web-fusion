@@ -47,7 +47,6 @@ function RenderElement({ element }: { element: EditorElement }) {
       },
       <Fragment>
         {element.data || ""}
-        {element.data || ""}
         {element.children?.map((children) => (
           <RenderElement element={children} key={children.id} />
         ))}
