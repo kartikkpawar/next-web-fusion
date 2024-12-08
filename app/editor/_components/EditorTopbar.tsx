@@ -29,7 +29,7 @@ function EditorTopbar({}: {
             <TooltipWrapper
               hoverText={device.tooltip}
               key={device.key}
-              side="right"
+              side="bottom"
             >
               <device.icon
                 className={cn(

@@ -1,8 +1,10 @@
 "use client";
+import { useEditorToolbars } from "@/components/providers/EditorToolbarsProvider";
 import { useElements } from "@/components/providers/ElementsProvider";
+import { deviceConfig } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { DragEndEvent, useDndMonitor, useDroppable } from "@dnd-kit/core";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function WebViewer({ pageId, siteId }: { pageId: string; siteId: string }) {
   const droppable = useDroppable({
@@ -40,21 +42,35 @@ function WebViewer({ pageId, siteId }: { pageId: string; siteId: string }) {
       }
     },
   });
+
+  const { topbarDevice } = useEditorToolbars();
+  const [device, setDevice] = useState(deviceConfig[topbarDevice]);
+  useEffect(() => {
+    setDevice(deviceConfig[topbarDevice]);
+  }, [topbarDevice]);
+
   return (
     <div
       className={cn(
-        "flex-1 h-full border-2 border-transparent rounded-lg",
+        "h-full border-2 border-transparent rounded-lg grow-0 w-full",
         droppable.isOver &&
           !droppable.active?.data?.current?.isLayerElement &&
           "border-white"
       )}
       ref={droppable.setNodeRef}
     >
-      <iframe
-        ref={iframeRef}
-        src={`/editor/${siteId}/${pageId}/pageview`}
-        className="w-full h-full"
-      ></iframe>
+      <div
+        className="relative p-3 box-border  mx-auto"
+        style={{
+          ...device,
+        }}
+      >
+        <iframe
+          ref={iframeRef}
+          src={`/editor/${siteId}/${pageId}/pageview`}
+          className="w-full h-full"
+        ></iframe>
+      </div>
     </div>
   );
 }

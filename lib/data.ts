@@ -82,3 +82,25 @@ export const sidebarSelectorMenu = [
     tooltip: "Push to github",
   },
 ];
+
+export const deviceConfig: Record<
+  string,
+  { aspectRatio: string; maxWidth?: string; maxHeight?: string }
+> = {
+  desktop: {
+    aspectRatio: (192 / 108).toFixed(2), // Standard Full HD aspect ratio (16:9)
+    maxHeight: "100%",
+  },
+  smartPhoneLandscape: {
+    aspectRatio: (812 / 375).toFixed(2), // Landscape aspect ratio for iPhone 14 Pro
+    maxWidth: "812px",
+  },
+  tablet: {
+    aspectRatio: (768 / 1024).toFixed(2), // Common tablet aspect ratio (3:4)
+    maxWidth: "768px",
+  },
+  smartPhoneVertical: {
+    aspectRatio: (375 / 812).toFixed(2), // Vertical aspect ratio for iPhone 14 Pro
+    maxWidth: "375px",
+  },
+};

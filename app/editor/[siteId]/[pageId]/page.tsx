@@ -69,11 +69,13 @@ export default function EditorPage({
           <div className="flex h-full flex-col w-full">
             <EditorTopbar params={params} />
             <div className="flex h-full m-2 gap-5 overflow-hidden">
-              <ScrollArea className="bg-[#181826] w-[280px] p-2 h-full rounded-lg  border box-border">
+              <ScrollArea className="bg-[#181826] w-[280px] p-2 h-full rounded-lg  border box-border shrink-0">
                 {renderSidebar()}
               </ScrollArea>
-              <WebViewer pageId={params.pageId} siteId={params.siteId} />
-              <ScrollArea className="bg-[#181826] w-[280px] p-2 h-full rounded-lg  border box-border">
+              <ScrollArea className="w-full h-full">
+                <WebViewer pageId={params.pageId} siteId={params.siteId} />
+              </ScrollArea>
+              <ScrollArea className="bg-[#181826] w-[280px] p-2 h-full rounded-lg  border box-border shrink-0">
                 <WebComponentEditorSidebar />
               </ScrollArea>
             </div>
