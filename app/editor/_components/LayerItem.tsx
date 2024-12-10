@@ -10,6 +10,7 @@ import {
 import { EditorElement } from "@/lib/types/global.types";
 import { cn } from "@/lib/utils";
 import {
+  BoxIcon,
   EllipsisVertical,
   Image,
   Layout,
@@ -25,6 +26,9 @@ import {
   useDraggable,
   useDroppable,
 } from "@dnd-kit/core";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { saveAsComponent } from "@/actions/userComponents";
 
 const elementIcons = {
   Structure: Layout,
@@ -132,6 +136,16 @@ function LayerItem({
     },
   });
 
+  const saveAsComponentMutaion = useMutation({
+    mutationFn: saveAsComponent,
+    onSuccess: () => {
+      toast.success("Successfully saved as component");
+    },
+    onError: () => {
+      toast.success("Something went wrong");
+    },
+  });
+
   return (
     <Fragment>
       {index === 0 && (
@@ -170,7 +184,6 @@ function LayerItem({
           {...draggable.attributes}
           ref={draggable.setNodeRef}
         >
-          {index}
           <Icon size={16} />
           <span className="text-sm text-ellipsis w-full overflow-hidden text-left">
             {element.tag} {element.data && " - " + element.data}
@@ -182,6 +195,11 @@ function LayerItem({
             <DropdownMenuContent className="min-w-max">
               <DropdownMenuItem onClick={() => deleteElement(element.id)}>
                 <Trash2Icon /> Delete element
+              </DropdownMenuItem>{" "}
+              <DropdownMenuItem
+                onClick={() => saveAsComponentMutaion.mutate(element)}
+              >
+                <BoxIcon /> Save as component
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

@@ -42,3 +42,8 @@ model Page {
   status        String     @default("DRAFT")
   createdBy     String?   
 }
+
+model Component{
+  id          String     @id @default(cuid())
+  element     String
+}
