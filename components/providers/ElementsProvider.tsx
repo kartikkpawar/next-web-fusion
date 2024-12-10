@@ -44,12 +44,14 @@ type ElementProviderDataType = {
     indexFrom,
     indexTo,
     to,
+    position,
   }: {
     indexFrom: number;
     indexTo: number;
     from: string;
     to: string;
     element: EditorElement;
+    position: string;
   }) => void;
 };
 
@@ -237,23 +239,26 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     indexFrom,
     indexTo,
     to,
+    position,
   }: {
     indexFrom: number;
     indexTo: number;
     from: string;
     to: string;
+    position: string;
     element: EditorElement;
   }) => {
-    console.log({ element, from, indexFrom, indexTo, to });
     const eleCopy = JSON.parse(JSON.stringify(elements)) as EditorElement[];
     deleteFromIndex(indexFrom, from, eleCopy);
     const updatedElements = addToIndex(
       indexTo,
       to,
       element,
-      eleCopy
+      eleCopy,
+      position
     ) as EditorElement[];
     setElements(updatedElements);
+    saveElements(updatedElements);
   };
 
   const deleteFromIndex = (
@@ -281,9 +286,19 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     index: number,
     parent: string,
     element: EditorElement,
-    allElements: EditorElement[]
+    allElements: EditorElement[],
+    position: string
   ) => {
     if (parent === "body") {
+      if (position === "bottom" && index === 0) {
+        const updatedElements = [
+          allElements[0],
+          element,
+          ...allElements.slice(index + 1),
+        ];
+        return updatedElements;
+      }
+
       const updatedElements = [
         ...allElements.slice(0, index),
         element,
@@ -302,7 +317,7 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
         return updatedElements;
       }
       if (currElemetnt.children) {
-        addToIndex(index, parent, element, currElemetnt.children);
+        addToIndex(index, parent, element, currElemetnt.children, position);
       }
     }
   };

@@ -114,12 +114,19 @@ function LayerItem({
         over?.data?.current?.isTopDroppablElement ||
         over?.data?.current?.isBottomDroppablElement;
       if (isInBetweenDrop) {
+        if (
+          active.data.current?.parent === over.data.current?.parent &&
+          active.data.current?.index === over.data.current?.index
+        )
+          return;
+
         dndInBetweenLayerItem({
           element: active.data.current?.element,
           from: active.data.current?.parent,
           indexFrom: active.data.current?.index,
           indexTo: over.data.current?.index,
           to: over.data.current?.parent,
+          position: over.id.toString().split("-")[1],
         });
       }
     },
@@ -163,6 +170,7 @@ function LayerItem({
           {...draggable.attributes}
           ref={draggable.setNodeRef}
         >
+          {index}
           <Icon size={16} />
           <span className="text-sm text-ellipsis w-full overflow-hidden text-left">
             {element.tag} {element.data && " - " + element.data}
