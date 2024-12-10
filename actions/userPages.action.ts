@@ -8,6 +8,7 @@ import {
 import { EditorElement } from "@/lib/types/global.types";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function getPages(siteId: string) {
   const { userId } = await auth();
@@ -77,7 +78,7 @@ export async function createPage({
     throw new Error("Page with same slug already exist");
   }
 
-  return await prisma.page.create({
+  const pageData = await prisma.page.create({
     data: {
       previewImage: null,
       slug: data.slug,
@@ -86,6 +87,7 @@ export async function createPage({
       siteId,
     },
   });
+  redirect(`/editor/${siteId}/${pageData.id}`);
 }
 
 export async function editPage({
