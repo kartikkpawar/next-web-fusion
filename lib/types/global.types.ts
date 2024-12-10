@@ -30,7 +30,7 @@ export type EditorElement = {
   id: string;
   tag: string;
   className?: string[];
-  children?: EditorElement[];
+  children: EditorElement[];
   data?: string;
   subCategory: string;
   category: string;

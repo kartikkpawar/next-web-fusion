@@ -6,9 +6,15 @@ function EditorLayersSidebar({}: { pageId: string }) {
   const { elements } = useElements();
 
   return (
-    <div className="flex flex-col gap-2">
-      {elements.map((element) => (
-        <LayerItem element={element} key={element.id} depth={0} from="" />
+    <div className="flex flex-col gap-1">
+      {elements.map((element, index) => (
+        <LayerItem
+          element={element}
+          key={element.id}
+          depth={0}
+          index={index}
+          parent="body"
+        />
       ))}
     </div>
   );

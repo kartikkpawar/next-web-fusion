@@ -44,7 +44,8 @@ function DraggableElement({
     };
   }
 
-  const addElementHelper = () => {
+  const addElementHelper = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (currElementId && isNotDraggable) {
       addElement({
         elementType: type,

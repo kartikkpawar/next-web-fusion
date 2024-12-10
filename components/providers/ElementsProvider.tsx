@@ -37,6 +37,20 @@ type ElementProviderDataType = {
     to: string;
     element: EditorElement;
   }) => void;
+
+  dndInBetweenLayerItem: ({
+    element,
+    from,
+    indexFrom,
+    indexTo,
+    to,
+  }: {
+    indexFrom: number;
+    indexTo: number;
+    from: string;
+    to: string;
+    element: EditorElement;
+  }) => void;
 };
 
 export const EditorContext = createContext<ElementProviderDataType>({
@@ -48,6 +62,7 @@ export const EditorContext = createContext<ElementProviderDataType>({
   currentActiveElement: null,
   elements: [],
   dndLayerItem: () => {},
+  dndInBetweenLayerItem: () => {},
 });
 
 const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
@@ -123,12 +138,12 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
   };
 
   const addMlElement = (
-    allEelements: EditorElement[],
+    allElements: EditorElement[],
     eleId: string,
     toAddElement: EditorElement
   ) => {
-    for (let eleIndex = 0; eleIndex < allEelements.length; eleIndex++) {
-      const element = allEelements[eleIndex];
+    for (let eleIndex = 0; eleIndex < allElements.length; eleIndex++) {
+      const element = allElements[eleIndex];
       if (eleId === element.id) {
         element.children?.push(toAddElement);
         break;
@@ -157,21 +172,21 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
   };
 
   const updateMlElement = (
-    allEelements: EditorElement[],
+    allElements: EditorElement[],
     eleId: string,
     data: Partial<EditorElement>
   ) => {
-    for (let eleIndex = 0; eleIndex < allEelements.length; eleIndex++) {
-      let element = allEelements[eleIndex];
+    for (let eleIndex = 0; eleIndex < allElements.length; eleIndex++) {
+      let element = allElements[eleIndex];
       if (eleId === element.id) {
         element = { ...element, ...data };
-        allEelements[eleIndex] = element;
+        allElements[eleIndex] = element;
         break;
       }
       if (!element.children) continue;
       updateMlElement(element.children, eleId, data);
     }
-    return allEelements;
+    return allElements;
   };
 
   const deleteElement = (elementId: string) => {
@@ -184,22 +199,22 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     }
   };
 
-  const deleteMLElement = (allEelements: EditorElement[], eleId: string) => {
-    const isElePresent = allEelements.findIndex(
+  const deleteMLElement = (allElements: EditorElement[], eleId: string) => {
+    const isElePresent = allElements.findIndex(
       (element) => element.id === eleId
     );
 
     if (isElePresent > -1) {
-      allEelements.splice(isElePresent, 1);
+      allElements.splice(isElePresent, 1);
     }
 
-    for (let eleIndex = 0; eleIndex < allEelements.length; eleIndex++) {
-      const element = allEelements[eleIndex];
+    for (let eleIndex = 0; eleIndex < allElements.length; eleIndex++) {
+      const element = allElements[eleIndex];
       if (!element.children) continue;
       deleteMLElement(element.children, eleId);
     }
 
-    return allEelements;
+    return allElements;
   };
 
   const dndLayerItem = ({
@@ -216,6 +231,82 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     saveElements(updatedElements);
   };
 
+  const dndInBetweenLayerItem = ({
+    element,
+    from,
+    indexFrom,
+    indexTo,
+    to,
+  }: {
+    indexFrom: number;
+    indexTo: number;
+    from: string;
+    to: string;
+    element: EditorElement;
+  }) => {
+    console.log({ element, from, indexFrom, indexTo, to });
+    const eleCopy = JSON.parse(JSON.stringify(elements)) as EditorElement[];
+    deleteFromIndex(indexFrom, from, eleCopy);
+    const updatedElements = addToIndex(
+      indexTo,
+      to,
+      element,
+      eleCopy
+    ) as EditorElement[];
+    setElements(updatedElements);
+  };
+
+  const deleteFromIndex = (
+    index: number,
+    parent: string,
+    allElements: EditorElement[]
+  ) => {
+    if (parent === "body") {
+      allElements.splice(index, 1);
+      return;
+    }
+
+    for (let eleIndex = 0; eleIndex < allElements.length; eleIndex++) {
+      const element = allElements[eleIndex];
+      if (element.id === parent) {
+        element.children?.splice(index, 1);
+        break;
+      }
+      if (element.children) {
+        deleteFromIndex(index, parent, element.children);
+      }
+    }
+  };
+  const addToIndex = (
+    index: number,
+    parent: string,
+    element: EditorElement,
+    allElements: EditorElement[]
+  ) => {
+    if (parent === "body") {
+      const updatedElements = [
+        ...allElements.slice(0, index),
+        element,
+        ...allElements.slice(index),
+      ];
+      return updatedElements;
+    }
+    for (let eleIndex = 0; eleIndex < allElements.length; eleIndex++) {
+      const currElemetnt = allElements[eleIndex];
+      if (currElemetnt.id === parent && currElemetnt.children) {
+        const updatedElements = [
+          ...currElemetnt.children.slice(0, index),
+          element,
+          ...currElemetnt.children.slice(index),
+        ];
+        return updatedElements;
+      }
+      if (currElemetnt.children) {
+        addToIndex(index, parent, element, currElemetnt.children);
+      }
+    }
+  };
+
   return (
     <EditorContext.Provider
       value={{
@@ -227,6 +318,7 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
         currentActiveElement,
         deleteElement,
         dndLayerItem,
+        dndInBetweenLayerItem,
       }}
     >
       {children}
