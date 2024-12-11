@@ -1,10 +1,18 @@
 "use client";
 import { useEditorToolbars } from "@/components/providers/EditorToolbarsProvider";
+import { useElements } from "@/components/providers/ElementsProvider";
 import TooltipWrapper from "@/components/TooltipWrapper";
 import { Button } from "@/components/ui/button";
 import { devices } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { Code, Eye } from "lucide-react";
+import {
+  CheckIcon,
+  CircleXIcon,
+  Code,
+  Eye,
+  LifeBuoy,
+  Loader2Icon,
+} from "lucide-react";
 
 function EditorTopbar({}: {
   params: {
@@ -13,6 +21,7 @@ function EditorTopbar({}: {
   };
 }) {
   const { setTopbarDevice, topbarDevice } = useEditorToolbars();
+  const { elementsSaveStatus } = useElements();
 
   return (
     <div className="w-full flex px-3 gap-5 border-b border-separate bg-[#181826] h-max py-2">
@@ -44,10 +53,27 @@ function EditorTopbar({}: {
         ))}
       </div>
       <div className="flex items-center gap-3">
-        {/* <Button variant={"outline"} onClick={saveElements}>
-          <CheckIcon />
-          Save
-        </Button> */}
+        {elementsSaveStatus === "success" && (
+          <TooltipWrapper hoverText="Saved Successfully">
+            <CheckIcon className="stroke-green-500" />
+          </TooltipWrapper>
+        )}
+        {elementsSaveStatus === "saving" && (
+          <TooltipWrapper hoverText="Saving">
+            <Loader2Icon className="animate-spin stroke-primary" />
+          </TooltipWrapper>
+        )}
+        {elementsSaveStatus === "error" && (
+          <TooltipWrapper hoverText="Unable to save">
+            <CircleXIcon className="stroke-destructive" />
+          </TooltipWrapper>
+        )}
+        {elementsSaveStatus === "idle" && (
+          <TooltipWrapper hoverText="Data will be save automatically">
+            <LifeBuoy className="stroke-primary" />
+          </TooltipWrapper>
+        )}
+
         <Button variant={"outline"}>
           <Eye />
           Preview

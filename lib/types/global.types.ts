@@ -37,3 +37,4 @@ export type EditorElement = {
 };
 
 export type BoxModelParams = "margin" | "border-width" | "padding";
+export type EditorSaveStatus = "idle" | "saving" | "success" | "error";

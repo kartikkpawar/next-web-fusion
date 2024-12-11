@@ -2,7 +2,7 @@
 import { getPageElements, updatePageData } from "@/actions/userPages.action";
 import useDebounce from "@/hooks/use-debounce";
 import { contructElement } from "@/lib/helper";
-import { EditorElement } from "@/lib/types/global.types";
+import { EditorElement, EditorSaveStatus } from "@/lib/types/global.types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { nanoid } from "nanoid";
 import { useParams } from "next/navigation";
@@ -55,6 +55,7 @@ type ElementProviderDataType = {
     position: string;
   }) => void;
   addComponent: (element: EditorElement) => void;
+  elementsSaveStatus: EditorSaveStatus;
 };
 
 export const EditorContext = createContext<ElementProviderDataType>({
@@ -68,6 +69,7 @@ export const EditorContext = createContext<ElementProviderDataType>({
   dndLayerItem: () => {},
   dndInBetweenLayerItem: () => {},
   addComponent: () => {},
+  elementsSaveStatus: "idle",
 });
 
 const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
@@ -75,6 +77,8 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
   const [elements, setElements] = useState<EditorElement[]>([]);
   const [currentActiveElement, setCurrentActiveElement] =
     useState<EditorElement | null>(null);
+  const [elementsSaveStatus, setElementsSaveStatus] =
+    useState<EditorSaveStatus>("idle");
 
   useEffect(() => {
     setIsMounted(true);
@@ -91,9 +95,11 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     mutationFn: updatePageData,
     onSuccess: () => {
       console.log("Updated Successfully");
+      setElementsSaveStatus("success");
     },
     onError: (error) => {
       console.log(error.message);
+      setElementsSaveStatus("error");
     },
   });
 
@@ -159,6 +165,7 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
   };
 
   const saveElements = (newElements?: EditorElement[]) => {
+    setElementsSaveStatus("saving");
     saveDebounce({
       elements: newElements || elements,
       pageId: params?.pageId as string,
@@ -346,6 +353,7 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
         dndLayerItem,
         dndInBetweenLayerItem,
         addComponent,
+        elementsSaveStatus,
       }}
     >
       {children}
