@@ -46,4 +46,6 @@ model Page {
 model Component{
   id          String     @id @default(cuid())
   element     String
+  userId      String
+  name        String
 }

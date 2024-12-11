@@ -4,6 +4,7 @@ import useDebounce from "@/hooks/use-debounce";
 import { contructElement } from "@/lib/helper";
 import { EditorElement } from "@/lib/types/global.types";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { nanoid } from "nanoid";
 import { useParams } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
@@ -53,6 +54,7 @@ type ElementProviderDataType = {
     element: EditorElement;
     position: string;
   }) => void;
+  addComponent: (element: EditorElement) => void;
 };
 
 export const EditorContext = createContext<ElementProviderDataType>({
@@ -65,6 +67,7 @@ export const EditorContext = createContext<ElementProviderDataType>({
   elements: [],
   dndLayerItem: () => {},
   dndInBetweenLayerItem: () => {},
+  addComponent: () => {},
 });
 
 const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
@@ -322,6 +325,14 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
     }
   };
 
+  const addComponent = (element: EditorElement) => {
+    setElements((prev) => {
+      const updatedElements = [...prev, { ...element, id: nanoid(5) }];
+      saveElements(updatedElements);
+      return updatedElements;
+    });
+  };
+
   return (
     <EditorContext.Provider
       value={{
@@ -334,6 +345,7 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
         deleteElement,
         dndLayerItem,
         dndInBetweenLayerItem,
+        addComponent,
       }}
     >
       {children}

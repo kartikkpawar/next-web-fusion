@@ -15,7 +15,7 @@ function WebViewer({ pageId, siteId }: { pageId: string; siteId: string }) {
   });
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  const { addElement, elements } = useElements();
+  const { addElement, elements, addComponent } = useElements();
 
   useEffect(() => {
     if (iframeRef.current) {
@@ -34,6 +34,10 @@ function WebViewer({ pageId, siteId }: { pageId: string; siteId: string }) {
       const isOverdroppingArea = over?.data?.current?.isElementsDropArea;
       if (isOverdroppingArea) {
         if (active.data.current?.isLayerElement) return;
+        if (active.data.current?.isComponent) {
+          addComponent(active.data.current.element);
+          return;
+        }
         addElement({
           elementType: active.data.current?.type,
           elementCategory: active.data.current?.category,

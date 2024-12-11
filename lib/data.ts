@@ -64,7 +64,7 @@ export const sidebarSelectorMenu = [
   {
     icon: CirclePlusIcon,
     key: "elements",
-    tooltip: "Add Element",
+    tooltip: "Elements",
   },
   {
     icon: SendToBackIcon,
@@ -74,12 +74,12 @@ export const sidebarSelectorMenu = [
   {
     icon: BoxIcon,
     key: "components",
-    tooltip: "Add Components",
+    tooltip: "Components",
   },
   {
     icon: GitMerge,
     key: "git",
-    tooltip: "Push to github",
+    tooltip: "Version control",
   },
 ];
 

@@ -10,6 +10,12 @@ import {
 import { EditorElement } from "@/lib/types/global.types";
 import { cn } from "@/lib/utils";
 import {
+  DragEndEvent,
+  useDndMonitor,
+  useDraggable,
+  useDroppable,
+} from "@dnd-kit/core";
+import {
   BoxIcon,
   EllipsisVertical,
   Image,
@@ -20,15 +26,7 @@ import {
 } from "lucide-react";
 import React, { Fragment, useState } from "react";
 import AddItemToLayerButton from "./AddItemToLayerButton";
-import {
-  DragEndEvent,
-  useDndMonitor,
-  useDraggable,
-  useDroppable,
-} from "@dnd-kit/core";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { saveAsComponent } from "@/actions/userComponents";
+import SaveComponentDialog from "./SaveComponentDialog";
 
 const elementIcons = {
   Structure: Layout,
@@ -61,6 +59,7 @@ function LayerItem({
 
   const [showAdd, setShowAdd] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [saveComponentDialog, setSaveComponentDialog] = useState(false);
 
   const onRightClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
@@ -136,16 +135,6 @@ function LayerItem({
     },
   });
 
-  const saveAsComponentMutaion = useMutation({
-    mutationFn: saveAsComponent,
-    onSuccess: () => {
-      toast.success("Successfully saved as component");
-    },
-    onError: () => {
-      toast.success("Something went wrong");
-    },
-  });
-
   return (
     <Fragment>
       {index === 0 && (
@@ -196,9 +185,7 @@ function LayerItem({
               <DropdownMenuItem onClick={() => deleteElement(element.id)}>
                 <Trash2Icon /> Delete element
               </DropdownMenuItem>{" "}
-              <DropdownMenuItem
-                onClick={() => saveAsComponentMutaion.mutate(element)}
-              >
+              <DropdownMenuItem onClick={() => setSaveComponentDialog(true)}>
                 <BoxIcon /> Save as component
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -226,6 +213,11 @@ function LayerItem({
             "bg-primary"
         )}
         ref={droppableBottom.setNodeRef}
+      />
+      <SaveComponentDialog
+        open={saveComponentDialog}
+        onClose={setSaveComponentDialog}
+        element={element}
       />
     </Fragment>
   );
