@@ -34,6 +34,7 @@ function WebViewer({ pageId, siteId }: { pageId: string; siteId: string }) {
       const isOverdroppingArea = over?.data?.current?.isElementsDropArea;
       if (isOverdroppingArea) {
         if (active.data.current?.isLayerElement) return;
+
         if (active.data.current?.isComponent) {
           addComponent(active.data.current.element);
           return;

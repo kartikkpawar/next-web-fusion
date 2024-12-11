@@ -26,6 +26,7 @@ function UserComponent({
     data: {
       element: JSON.parse(element),
       isComponent: true,
+      name,
     },
   });
 
