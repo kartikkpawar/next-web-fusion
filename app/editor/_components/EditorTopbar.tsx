@@ -13,8 +13,11 @@ import {
   LifeBuoy,
   Loader2Icon,
 } from "lucide-react";
+import Link from "next/link";
 
-function EditorTopbar({}: {
+function EditorTopbar({
+  params,
+}: {
   params: {
     pageId: string;
     siteId: string;
@@ -70,14 +73,19 @@ function EditorTopbar({}: {
         )}
         {elementsSaveStatus === "idle" && (
           <TooltipWrapper hoverText="Data will be save automatically">
-            <LifeBuoy className="stroke-primary" />
+            <LifeBuoy className="stroke-white" />
           </TooltipWrapper>
         )}
 
-        <Button variant={"outline"}>
-          <Eye />
-          Preview
-        </Button>
+        <Link
+          href={`/preview/${params.siteId}?page=${params.pageId}`}
+          target="_blank"
+        >
+          <Button variant={"outline"}>
+            <Eye />
+            Preview
+          </Button>
+        </Link>
         <Button variant={"outline"}>
           <Code />
           Export

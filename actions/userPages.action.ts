@@ -184,3 +184,13 @@ export async function getPageElements(id: string) {
     },
   });
 }
+export async function getPageElementsPreview(id: string) {
+  return await prisma.page.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      elements: true,
+    },
+  });
+}

@@ -30,7 +30,8 @@ function BreadCrumb() {
         </BreadcrumbItem>
 
         {splitPath.map((path) => {
-          if (path === "" || path === "dashboard") return <></>;
+          if (path === "" || path === "dashboard")
+            return <Fragment key={""}></Fragment>;
           return (
             <Fragment key={path}>
               <BreadcrumbSeparator />
