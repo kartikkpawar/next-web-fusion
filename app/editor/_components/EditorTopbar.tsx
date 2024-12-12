@@ -5,15 +5,9 @@ import TooltipWrapper from "@/components/TooltipWrapper";
 import { Button } from "@/components/ui/button";
 import { devices } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import {
-  CheckIcon,
-  CircleXIcon,
-  Code,
-  Eye,
-  LifeBuoy,
-  Loader2Icon,
-} from "lucide-react";
+import { CheckIcon, CircleXIcon, Code, Eye, Loader2Icon } from "lucide-react";
 import Link from "next/link";
+import PublicPreviewDialog from "./PublicPreviewDialog";
 
 function EditorTopbar({
   params,
@@ -55,7 +49,9 @@ function EditorTopbar({
           </div>
         ))}
       </div>
+
       <div className="flex items-center gap-3">
+        <PublicPreviewDialog pageId={params.pageId} siteId={params.siteId} />
         {elementsSaveStatus === "success" && (
           <TooltipWrapper hoverText="Saved Successfully">
             <CheckIcon className="stroke-green-500" />
@@ -71,12 +67,6 @@ function EditorTopbar({
             <CircleXIcon className="stroke-destructive" />
           </TooltipWrapper>
         )}
-        {elementsSaveStatus === "idle" && (
-          <TooltipWrapper hoverText="Data will be save automatically">
-            <LifeBuoy className="stroke-white" />
-          </TooltipWrapper>
-        )}
-
         <Link
           href={`/preview/${params.siteId}?page=${params.pageId}`}
           target="_blank"

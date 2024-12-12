@@ -41,6 +41,7 @@ model Page {
   site          Site?   @relation( fields: [siteId], references: [id], onDelete: Cascade)
   status        String     @default("DRAFT")
   createdBy     String?   
+  publicPreview Boolean? @default(false)
 }
 
 model Component{

@@ -1,5 +1,5 @@
 "use client";
-import { getPageElements, updatePageData } from "@/actions/userPages.action";
+import { getPageData, updatePageData } from "@/actions/userPages.action";
 import useDebounce from "@/hooks/use-debounce";
 import { contructElement } from "@/lib/helper";
 import { EditorElement, EditorSaveStatus } from "@/lib/types/global.types";
@@ -56,6 +56,7 @@ type ElementProviderDataType = {
   }) => void;
   addComponent: (element: EditorElement) => void;
   elementsSaveStatus: EditorSaveStatus;
+  pagePreviewStatus: boolean;
 };
 
 export const EditorContext = createContext<ElementProviderDataType>({
@@ -70,6 +71,7 @@ export const EditorContext = createContext<ElementProviderDataType>({
   dndInBetweenLayerItem: () => {},
   addComponent: () => {},
   elementsSaveStatus: "idle",
+  pagePreviewStatus: false,
 });
 
 const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
@@ -80,6 +82,8 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
   const [elementsSaveStatus, setElementsSaveStatus] =
     useState<EditorSaveStatus>("idle");
 
+  const [pagePreviewStatus, setPagePreviewStatus] = useState(false);
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -88,7 +92,7 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
 
   const data = useQuery({
     queryKey: ["page-data", params?.pageId],
-    queryFn: () => getPageElements(params?.pageId as string),
+    queryFn: () => getPageData({ id: params?.pageId as string }),
   });
 
   const updateDataMutation = useMutation({
@@ -114,6 +118,7 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
       console.log(error);
       setElements([]);
     }
+    setPagePreviewStatus(data.data.publicPreview || false);
   }, [data.data]);
 
   if (!isMounted) return null;
@@ -166,8 +171,11 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
 
   const saveElements = (newElements?: EditorElement[]) => {
     setElementsSaveStatus("saving");
+    const ele = newElements || elements;
     saveDebounce({
-      elements: newElements || elements,
+      data: {
+        elements: JSON.stringify(ele),
+      },
       pageId: params?.pageId as string,
       siteId: params?.siteId as string,
     });
@@ -354,6 +362,7 @@ const ElementsProvider: React.FC<ElementProviderProps> = ({ children }) => {
         dndInBetweenLayerItem,
         addComponent,
         elementsSaveStatus,
+        pagePreviewStatus,
       }}
     >
       {children}

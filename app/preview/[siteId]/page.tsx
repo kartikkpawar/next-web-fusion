@@ -1,6 +1,6 @@
 "use client";
 
-import { getPageElementsPreview } from "@/actions/userPages.action";
+import { getPageData } from "@/actions/userPages.action";
 import RenderElement from "@/lib/elements/RenderElement";
 import { EditorElement } from "@/lib/types/global.types";
 import { useQuery } from "@tanstack/react-query";
@@ -20,7 +20,7 @@ export default function Pageview({
 
   const data = useQuery({
     queryKey: ["page-data", pageId],
-    queryFn: () => getPageElementsPreview(pageId),
+    queryFn: () => getPageData({ id: pageId, preview: true }),
   });
   const [elements, setElements] = useState<EditorElement[]>([]);
 

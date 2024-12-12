@@ -75,9 +75,11 @@ export default function EditorPage({
               <ScrollArea className="w-full h-full">
                 <WebViewer pageId={params.pageId} siteId={params.siteId} />
               </ScrollArea>
-              <ScrollArea className="bg-[#181826] w-[280px] p-2 h-full rounded-lg  border box-border shrink-0">
-                <WebComponentEditorSidebar />
-              </ScrollArea>
+              {selectedSidebar === "layers" && (
+                <ScrollArea className="bg-[#181826] w-[280px] p-2 h-full rounded-lg  border box-border shrink-0">
+                  <WebComponentEditorSidebar />
+                </ScrollArea>
+              )}
             </div>
           </div>
         </div>

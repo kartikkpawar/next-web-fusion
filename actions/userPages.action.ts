@@ -4,8 +4,8 @@ import {
   createPageSchema,
   createPageSchemaType,
 } from "@/lib/types/forms.types";
-import { EditorElement } from "@/lib/types/global.types";
 import { auth } from "@clerk/nextjs/server";
+import { Page } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -129,11 +129,11 @@ export async function editPage({
 }
 
 export async function updatePageData({
-  elements,
+  data,
   pageId,
   siteId,
 }: {
-  elements: EditorElement[];
+  data: Partial<Page>;
   pageId: string;
   siteId: string;
 }) {
@@ -162,35 +162,47 @@ export async function updatePageData({
       userId,
     },
     data: {
-      elements: JSON.stringify(elements),
+      ...data,
     },
   });
   revalidatePath(`/editor/${siteId}/${pageId}`);
 }
 
-export async function getPageElements(id: string) {
+export async function getPageData({
+  id,
+  preview,
+}: {
+  id: string;
+  preview?: boolean;
+}) {
+  let authenticated = true;
   const { userId } = await auth();
 
   if (!userId) {
-    throw new Error("Not Authenticated");
+    authenticated = false;
   }
 
-  return await prisma.page.findUnique({
+  const data = await prisma.page.findUnique({
     where: {
       id,
     },
     select: {
       elements: true,
+      publicPreview: true,
     },
   });
-}
-export async function getPageElementsPreview(id: string) {
-  return await prisma.page.findUnique({
-    where: {
-      id,
-    },
-    select: {
-      elements: true,
-    },
-  });
+  console.log(data?.publicPreview, preview, authenticated);
+
+  if (data?.publicPreview && preview) {
+    return data;
+  }
+
+  if (!authenticated && preview) {
+    redirect("/");
+  }
+  if (!authenticated) {
+    throw new Error("Not authenticated");
+  }
+
+  return data;
 }
