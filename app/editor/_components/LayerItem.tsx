@@ -17,6 +17,7 @@ import {
 } from "@dnd-kit/core";
 import {
   BoxIcon,
+  ChevronRight,
   EllipsisVertical,
   Image,
   Layout,
@@ -173,6 +174,11 @@ function LayerItem({
           {...draggable.attributes}
           ref={draggable.setNodeRef}
         >
+          {element?.children?.length > 0 && (
+            <ChevronRight
+              className={cn("transition-all", isOpen && "rotate-90")}
+            />
+          )}
           <Icon size={16} />
           <span className="text-sm text-ellipsis w-full overflow-hidden text-left">
             {element.tag} {element.data && " - " + element.data}
@@ -193,7 +199,6 @@ function LayerItem({
 
           <AddItemToLayerButton currElementId={element.id} showAdd={showAdd} />
         </Button>
-
         {isOpen &&
           element.children?.map((childElement, childIndex) => (
             <LayerItem

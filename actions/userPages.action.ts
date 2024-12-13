@@ -191,7 +191,6 @@ export async function getPageData({
       publicPreview: true,
     },
   });
-  console.log(data?.publicPreview, preview, authenticated);
 
   if (data?.publicPreview && preview) {
     return data;
