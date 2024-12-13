@@ -14,8 +14,10 @@ import { Button } from "@/components/ui/button";
 import { generateComponentSourceCode } from "@/lib/codeGenration";
 import { Code } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-function ItemSource() {
+function ItemSourcedialog() {
   const { currentActiveElement } = useElements();
   const [codeString, setcodeString] = useState("");
 
@@ -33,13 +35,27 @@ function ItemSource() {
           View Source
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="max-w-screen-lg w-full">
+      <AlertDialogContent className="max-w-screen-xl w-full">
         <AlertDialogHeader>
           <AlertDialogTitle>
             <AlertDialogCancel className="self-end">Cancel</AlertDialogCancel>
           </AlertDialogTitle>
-          <AlertDialogDescription>
-            <div className="w-full"></div>
+          <AlertDialogDescription className="w-full max-w-screen-xl">
+            <SyntaxHighlighter
+              language="jsx"
+              style={atomDark}
+              showLineNumbers
+              wrapLongLines={true}
+              wrapLines={true}
+              codeTagProps={{
+                style: {
+                  boxSizing: "border-box",
+                  textWrap: "wrap",
+                },
+              }}
+            >
+              {codeString}
+            </SyntaxHighlighter>
           </AlertDialogDescription>
         </AlertDialogHeader>
       </AlertDialogContent>
@@ -47,4 +63,4 @@ function ItemSource() {
   );
 }
 
-export default ItemSource;
+export default ItemSourcedialog;

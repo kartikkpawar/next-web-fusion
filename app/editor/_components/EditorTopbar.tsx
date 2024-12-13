@@ -7,7 +7,7 @@ import { devices } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { CheckIcon, CircleXIcon, Eye, Loader2Icon } from "lucide-react";
 import Link from "next/link";
-import ItemSource from "./ItemSource";
+import ItemSourcedialog from "./ItemSource";
 import PublicPreviewDialog from "./PublicPreviewDialog";
 
 function EditorTopbar({
@@ -77,7 +77,7 @@ function EditorTopbar({
             Preview
           </Button>
         </Link>
-        <ItemSource />
+        <ItemSourcedialog />
       </div>
     </div>
   );
