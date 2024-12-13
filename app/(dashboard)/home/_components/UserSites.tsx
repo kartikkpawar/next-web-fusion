@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
-import { AlertCircle, InboxIcon } from "lucide-react";
+import { AlertCircle, BookOpen, Code, InboxIcon } from "lucide-react";
 import Link from "next/link";
 import CreateSiteButton from "./CreateSiteButton";
 import SiteActions from "./SiteActions";
@@ -104,10 +104,17 @@ async function UserSites() {
               {formatDistanceToNow(site.createdAt, { addSuffix: true })}
             </div>
           </CardFooter>
-          <CardFooter>
+          <CardFooter className="gap-5">
             <Link href={`/site/${site.id}/pages`} className="w-full">
-              <Button className="w-full">View Pages</Button>
+              <Button className="w-full">
+                <BookOpen />
+                View Pages
+              </Button>
             </Link>
+            <Button className="w-full" variant={"secondary"}>
+              <Code />
+              Export
+            </Button>
           </CardFooter>
         </Card>
       ))}

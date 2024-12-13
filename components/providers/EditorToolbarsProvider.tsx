@@ -26,7 +26,7 @@ const EditorToolbarsProvider: React.FC<EditorToolbarsProviderProps> = ({
 }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [topbarDevice, setTopbarDevice] = useState("desktop");
-  const [selectedSidebar, setSelectedSidebar] = useState("components");
+  const [selectedSidebar, setSelectedSidebar] = useState("layers");
 
   useEffect(() => {
     setIsMounted(true);

@@ -5,8 +5,9 @@ import TooltipWrapper from "@/components/TooltipWrapper";
 import { Button } from "@/components/ui/button";
 import { devices } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { CheckIcon, CircleXIcon, Code, Eye, Loader2Icon } from "lucide-react";
+import { CheckIcon, CircleXIcon, Eye, Loader2Icon } from "lucide-react";
 import Link from "next/link";
+import ItemSource from "./ItemSource";
 import PublicPreviewDialog from "./PublicPreviewDialog";
 
 function EditorTopbar({
@@ -76,10 +77,7 @@ function EditorTopbar({
             Preview
           </Button>
         </Link>
-        <Button variant={"outline"}>
-          <Code />
-          Export
-        </Button>
+        <ItemSource />
       </div>
     </div>
   );
