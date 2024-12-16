@@ -1,4 +1,5 @@
 "use server";
+import { createProject, deleteProject } from "@/lib/codeGen/project";
 import prisma from "@/lib/prisma";
 import {
   createSiteSchema,
@@ -65,6 +66,8 @@ export async function createUserSite(formValues: createSiteSchemaType) {
     },
   });
 
+  createProject(site.id);
+
   redirect(`/site/${site.id}/pages`);
 }
 
@@ -107,6 +110,8 @@ export async function deleteSite(id: string) {
       id,
     },
   });
+
+  deleteProject(id);
 
   revalidatePath("/home");
 }

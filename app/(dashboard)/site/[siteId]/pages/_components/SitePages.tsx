@@ -115,9 +115,18 @@ async function SitePages({ siteId }: { siteId: string }) {
               </div>
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="gap-2">
             <Link href={`/editor/${page.siteId}/${page.id}`} className="w-full">
               <Button className="w-full">Page Editor</Button>
+            </Link>
+            <Link
+              href={`/preview/${page.siteId}?page=${page.id}`}
+              className="w-full"
+              target="_blank"
+            >
+              <Button className="w-full" variant={"secondary"}>
+                Preview
+              </Button>
             </Link>
           </CardFooter>
         </Card>

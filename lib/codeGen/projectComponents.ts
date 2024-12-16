@@ -1,5 +1,5 @@
 // import "server-only";
-import { EditorElement } from "./types/global.types";
+import { EditorElement } from "../types/global.types";
 
 function generateItemSourceHelper(data: EditorElement[], depth = 0) {
   const indent = "\t".repeat(depth); // Indentation based on depth
@@ -35,3 +35,5 @@ export function generateComponentSourceCode(data: EditorElement[]): string {
     )
   }`;
 }
+
+// delete component

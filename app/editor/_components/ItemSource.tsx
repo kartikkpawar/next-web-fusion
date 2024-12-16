@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
-import { generateComponentSourceCode } from "@/lib/codeGenration";
+import { generateComponentSourceCode } from "@/lib/codeGen/projectComponents";
 import { Check, Code, Copy, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
