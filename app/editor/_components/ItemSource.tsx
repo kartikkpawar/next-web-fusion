@@ -1,4 +1,5 @@
 "use client";
+import { CodeBlock } from "@/components/CodeBlock";
 import { useElements } from "@/components/providers/ElementsProvider";
 import {
   AlertDialog,
@@ -14,8 +15,6 @@ import { Button } from "@/components/ui/button";
 import { generateComponentSourceCode } from "@/lib/codeGen/projectComponents";
 import { Check, Code, Copy, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { toast } from "sonner";
 
 function ItemSourcedialog() {
@@ -81,20 +80,12 @@ function ItemSourcedialog() {
                   )}
                 </div>
               </div>
-              <SyntaxHighlighter
+              <CodeBlock
                 language="jsx"
-                style={atomDark}
-                wrapLongLines={true}
-                wrapLines={true}
-                codeTagProps={{
-                  style: {
-                    boxSizing: "border-box",
-                    textWrap: "wrap",
-                  },
-                }}
-              >
-                {codeString}
-              </SyntaxHighlighter>
+                filename="Component.tsx"
+                code={codeString}
+                tabs={undefined}
+              />
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
