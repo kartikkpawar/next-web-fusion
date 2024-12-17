@@ -1,4 +1,9 @@
 "use server";
+import {
+  createPageFolder,
+  deletePageFolder,
+  remanePageFolder,
+} from "@/lib/codeGen/projectfiles";
 import prisma from "@/lib/prisma";
 import {
   createPageSchema,
@@ -36,6 +41,16 @@ export async function deletePage({
     throw new Error("Not Authenticated");
   }
 
+  const pageDetails = await prisma.page.findUnique({
+    where: {
+      id,
+      userId,
+      siteId,
+    },
+  });
+
+  if (!pageDetails) return revalidatePath(`/site/${siteId}/pages`);
+
   await prisma.page.delete({
     where: {
       id,
@@ -43,6 +58,8 @@ export async function deletePage({
       siteId,
     },
   });
+
+  deletePageFolder(siteId, pageDetails?.slug);
 
   revalidatePath(`/site/${siteId}/pages`);
 }
@@ -86,6 +103,8 @@ export async function createPage({
       siteId,
     },
   });
+
+  createPageFolder(siteId, data.slug);
   redirect(`/editor/${siteId}/${pageData.id}`);
 }
 
@@ -125,6 +144,8 @@ export async function editPage({
       ...formValues,
     },
   });
+
+  remanePageFolder(siteId, alreadyDeleted.slug, formValues.slug);
   revalidatePath(`/site/${siteId}/pages`);
 }
 
