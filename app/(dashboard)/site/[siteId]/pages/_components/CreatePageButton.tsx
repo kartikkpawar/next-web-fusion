@@ -59,7 +59,7 @@ function CreatePageButton({
   const onSubmit = (values: createPageSchemaType) => {
     const newValues = { ...values };
     if (!values.slug) {
-      const slug = generateSlug(values.title);
+      const slug = generateSlug(values.title.trim());
       form.setValue("slug", slug);
       newValues.slug = slug;
       setSlugMessage("");
