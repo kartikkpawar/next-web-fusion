@@ -45,7 +45,7 @@ function EditPageDialog({
   const mutation = useMutation({
     mutationFn: editPage,
     onSuccess: () => {
-      toast.success("Site created successfully", { id: "create-site" });
+      toast.success("Site updated successfully", { id: "create-site" });
       setOpen(false);
     },
     onError: (error: Error) => {

@@ -3,6 +3,7 @@ import {
   createPageFolder,
   deletePageFolder,
   remanePageFolder,
+  updatePageFile,
 } from "@/lib/codeGen/projectfiles";
 import prisma from "@/lib/prisma";
 import {
@@ -186,6 +187,7 @@ export async function updatePageData({
       ...data,
     },
   });
+  updatePageFile(pagePresent.slug, data.elements, siteId);
   revalidatePath(`/editor/${siteId}/${pageId}`);
 }
 

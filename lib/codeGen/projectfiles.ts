@@ -8,6 +8,7 @@ export default function Page() {
 
 import path from "path";
 import fs from "fs-extra";
+import { generateComponentSourceCode } from "./projectComponents";
 
 // create page
 export function createPageFolder(siteId: string, slug: string) {
@@ -54,4 +55,22 @@ export function remanePageFolder(
   );
 }
 
-// update page
+export function updatePageFile(
+  slug: string,
+  data: string | undefined,
+  siteId: string
+) {
+  if (!data) return;
+  const projectPath = path.join(
+    __dirname,
+    "../../../../../../../../",
+    "next-web-fusion-temp",
+    "projects",
+    siteId
+  );
+  const pageFolderPath = path.join(projectPath, "app", slug);
+  fs.writeFileSync(
+    path.join(pageFolderPath, "page.tsx"),
+    generateComponentSourceCode(JSON.parse(data))
+  );
+}
